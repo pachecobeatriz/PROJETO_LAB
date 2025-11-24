@@ -1,36 +1,10 @@
-const usuario = JSON.parse(sessionStorage.getItem('usuario'));
-//const teste = JSON.parse(sessionStorage.getItem(usuario.login));
-
-// Se não existir usuário logado, volta pro login
-if (!usuario) {
-    alert("Você precisa estar logado para acessar esta página.");
-    window.location.href = "../index.html";
-}
-
-// Pros links que voltam pra tela Principal
-const linkPrincipal = document.getElementById('linkPrincipal');
-const principal = document.getElementById('principal');
-
-if (usuario.perfil === 'PACIENTE') {
-    if (linkPrincipal) linkPrincipal.href = "../modules/paciente.html";
-    if (principal) principal.href = "../modules/paciente.html";
-} else if (usuario.perfil === 'MEDICO') {
-    if (linkPrincipal) linkPrincipal.href = "../modules/medico.html";
-    if (principal) principal.href = "../modules/medico.html";
-} else {
-    if (linkPrincipal) linkPrincipal.href = "../modules/funcionario.html";
-    if (principal) principal.href = "../modules/funcionario.html";
-}
-
-
-// Pro form de Perfil...
-
 const formulario = document.querySelector('[data-formulario]');
 const grupoNascimento = document.getElementById('grupoNascimento');
 const grupoEspecialidade = document.getElementById('grupoEspecialidade');
 const grupoCRM = document.getElementById('grupoCRM');
+const grupoMatricula = document.getElementById('grupoMatricula');
+const grupoCargo = document.getElementById('grupoCargo');
 
-// Põe as infos nos campos básicos
 if (document.getElementById('nome')) {
     document.getElementById('nome').value = usuario.nome || "";
     document.getElementById('cpf').value = usuario.cpf || "";
@@ -40,39 +14,56 @@ if (document.getElementById('nome')) {
     document.getElementById('senha').value = usuario.senha || "";
 }
 
-// FUNÇÃO
 function ajustarCamposPorPerfil() {
     grupoNascimento.classList.add('oculto');
     grupoEspecialidade.classList.add('oculto');
     grupoCRM.classList.add('oculto');
+    grupoMatricula.classList.add('oculto');
+    grupoCargo.classList.add('oculto');
 
     if (usuario.perfil === 'PACIENTE') {
         grupoNascimento.classList.remove('oculto');
-        // aqui você pode usar formatarDataInput se já tiver feito para paciente
-        document.getElementById('datanascimento').value = usuario.dataNascimento || "";
-    
+        // aqui a gente usa formatarDataInput se já tiver feito pra paciente.
+
+        if (usuario.dataNascimento) {
+            // se já veio do Back no login.
+            document.getElementById('datanascimento').value = usuario.dataNascimento || "";
+        } else {
+            // se não veio no login, daí busca no Back.
+            carregarDadosPaciente();
+        }
+
     } else if (usuario.perfil === 'MEDICO') {
         grupoEspecialidade.classList.remove('oculto');
         grupoCRM.classList.remove('oculto');
 
         if (usuario.especialidade || usuario.crm) {
-            // já veio do backend no login
+            // se já veio do Back no login.
             document.getElementById('especialidade').value = usuario.especialidade || "";
             document.getElementById('crm').value = usuario.crm || "";
         } else {
-            // não veio no login → buscar no backend
+            // se não veio no login, daí busca no Back.
             carregarDadosMedico();
         }
-    }
-}
 
+    } else if (usuario.perfil === 'FUNCIONARIO') {
+
+        if (usuario.matricula || usuario.cargo) {
+            // se já veio do Back no login.
+            document.getElementById('matricula').value = usuario.matricula || "";
+            document.getElementById('cargo').value = usuario.cargo || "";
+        } else {
+            // se não veio no login, daí busca no Back.
+            carregarDadosFuncionario();
+        }
+    }
+
+}
 ajustarCamposPorPerfil();
 
 
-
-// Pra atualização do user...
-
-// Envio do formulário para atualizar dados
+// ATUALIZAÇÃO do Usuário ~
+// Form...
 if (formulario) {
     formulario.addEventListener('submit', async (evento) => {
         evento.preventDefault();
@@ -92,13 +83,16 @@ if (formulario) {
         } else if (usuario.perfil === 'MEDICO') {
             usuarioAtualizado.especialidade = document.getElementById('especialidade').value;
             usuarioAtualizado.crm = document.getElementById('crm').value;
+        } else if (usuario.perfil === 'FUNCIONARIO') {
+            usuarioAtualizado.matricula = document.getElementById('matricula').value;
+            usuarioAtualizado.cargo = document.getElementById('cargo').value;
         }
 
         await atualizarUsuario(usuarioAtualizado);
     });
 }
 
-// FUNÇÃO
+// Função...
 async function atualizarUsuario(usuarioAtualizado) {
     let url;
 
@@ -107,7 +101,7 @@ async function atualizarUsuario(usuarioAtualizado) {
     } else if (usuarioAtualizado.perfil === 'MEDICO') {
         url = 'http://localhost:8080/laboratorio/rest/medico/atualizar';
     } else {
-        url = 'http://localhost:8080/laboratorio/rest/usuario/atualizar';
+        url = 'http://localhost:8080/laboratorio/rest/funcionario/atualizar';
     }
 
     const options = {
@@ -128,10 +122,13 @@ async function atualizarUsuario(usuarioAtualizado) {
         }
     } catch (erro) {
         console.error("Erro ao atualizar:", erro);
-        alert("Erro de conexão ao atualizar os dados.");
+        //alert("Erro de conexão ao atualizar os dados.");
     }
 }
 
+
+// Parte que carrega os dados ~
+// Paciente...
 async function carregarDadosPaciente() {
     try {
         const resposta = await fetch(`http://localhost:8080/laboratorio/rest/paciente/${usuario.idUsuario}`);
@@ -158,6 +155,7 @@ async function carregarDadosPaciente() {
     }
 }
 
+// Médico...
 async function carregarDadosMedico() {
     try {
         const resposta = await fetch(`http://localhost:8080/laboratorio/rest/medico/${usuario.idUsuario}`);
@@ -185,6 +183,36 @@ async function carregarDadosMedico() {
     }
 }
 
+// Funcionário...
+async function carregarDadosFuncionario() {
+    try {
+        const resposta = await fetch(`http://localhost:8080/laboratorio/rest/funcionario/${usuario.idUsuario}`);
+
+        if (!resposta.ok) {
+            console.error("Erro ao buscar dados do funcionário:", resposta.status);
+            return;
+        }
+
+        const funcionario = await resposta.json();
+
+        if (funcionario) {
+            // atualiza o objeto em memória
+            usuario.matricula = funcionario.matricula;
+            usuario.cargo = funcionario.cargo;
+
+            // salva atualizado na sessão
+            sessionStorage.setItem('usuario', JSON.stringify(usuario));
+
+            document.getElementById('matricula').value = funcionario.matricula || "";
+            document.getElementById('cargo').value = funcionario.cargo || "";
+        }
+    } catch (erro) {
+        console.error("Erro de conexão ao buscar dados do funcionário:", erro);
+    }
+}
+
+
+// Formatador de datas ~
 function formatarDataInput(data) {
     if (!data) return "";
 

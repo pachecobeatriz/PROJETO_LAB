@@ -28,10 +28,8 @@ public class ExameController {
 		ExameVO novoExame = exameBO.cadastrar(exameVO);
 
 		if (novoExame != null && novoExame.getIdExame() > 0) {
-			// Retorna Status 201 Created com o objeto recém-criado
 			return Response.status(Response.Status.CREATED).entity(novoExame).build();
 		} else {
-			// Retorna Status 400 Bad Request
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Falha ao cadastrar exame. Verifique os dados fornecidos.").build();
 		}
@@ -46,41 +44,34 @@ public class ExameController {
 		boolean sucesso = exameBO.atualizar(exameVO);
 
 		if (sucesso) {
-			// Retorna Status 200 OK
 			return Response.ok("Exame ID " + exameVO.getIdExame() + " atualizado com sucesso.").build();
 		} else {
-			// Retorna Status 400 Bad Request
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Falha ao atualizar o exame. Verifique o ID e os dados.").build();
 		}
 	}
 
-	@DELETE // Verbo HTTP para exclusão
+	@DELETE
 	@Path("/excluir/{id}")
-	@Produces(MediaType.APPLICATION_JSON) // Retorna mensagem em JSON
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response excluir(@PathParam("id") int idExame) {
 		ExameBO exameBO = new ExameBO();
 		String resultado = exameBO.excluir(idExame);
 
 		switch (resultado) {
 		case "SUCESSO":
-			// 200 OK ou 204 No Content (melhor para exclusão, mas usaremos 200 com
-			// mensagem)
 			return Response.ok("Exame excluído com sucesso.").build();
 
 		case "NAO_ENCONTRADO":
-			// 404 Not Found
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("Erro: Exame com ID " + idExame + " não foi encontrado.").build();
 
 		case "LAUDO_EXISTENTE":
-			// 400 Bad Request (Violação de Regra de Negócio)
 			return Response.status(Response.Status.BAD_REQUEST).entity(
 					"Atenção! Exames com status diferente de PENDENTE (indicando laudos cadastrados) não podem ser excluídos.")
 					.build();
 
 		default:
-			// 500 Internal Server Error (para FALHA_DB)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Erro interno ao tentar excluir o exame.").build();
 		}
@@ -122,7 +113,6 @@ public class ExameController {
 			lista = java.util.Collections.emptyList();
 		}
 
-		// 200 OK com lista (vazia ou não)
 		return Response.ok(lista).build();
 	}
 

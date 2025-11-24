@@ -18,8 +18,8 @@ public class PacienteBO {
 
 		// Controle de transação!
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
-		Connection conn = BancoJTA.getConnectionJTA(); // Geralmente faz no DAO, estamos fazendo aqui pq é um controle
-														// de transação.
+		Connection conn = BancoJTA.getConnectionJTA();
+		// Geralmente faz no DAO, estamos fazendo aqui pq é um controle de transação.
 
 		try {
 			userTransaction.begin();
@@ -42,23 +42,22 @@ public class PacienteBO {
 		return pacienteVO;
 	}
 
-	// NOVO
+	
 	public boolean atualizar(PacienteVO pacienteVO) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		PacienteDAO pacienteDAO = new PacienteDAO();
 		boolean sucesso = false;
 
-		// Controle de transação!
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
 		Connection conn = BancoJTA.getConnectionJTA();
 
 		try {
 			userTransaction.begin();
 
-			// 1. Atualiza as colunas na tabela 'usuario'
+			// Atualiza as colunas na tabela 'usuario'
 			boolean usuarioAtualizado = usuarioDAO.atualizar(pacienteVO, conn);
 
-			// 2. Atualiza as colunas na tabela 'paciente'
+			// Atualiza as colunas na tabela 'paciente'
 			boolean pacienteAtualizado = pacienteDAO.atualizar(pacienteVO, conn);
 
 			if (usuarioAtualizado && pacienteAtualizado) {
@@ -66,13 +65,11 @@ public class PacienteBO {
 				sucesso = true;
 				System.out.println("Paciente atualizado com sucesso!");
 			} else {
-				// Se uma das atualizações falhar, faz rollback
 				userTransaction.rollback();
 				System.out.println("Erro ao atualizar o Paciente. Rollback realizado.");
 			}
 
 		} catch (Exception erro) {
-			// Se houver qualquer exceção, garante o rollback
 			BancoJTA.rollbackJTA();
 			System.out.println("Erro geral na transação de atualização do Paciente.");
 			System.out.println("Erro: " + erro.getMessage());

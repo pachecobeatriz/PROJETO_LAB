@@ -69,7 +69,6 @@ public class UsuarioDAO {
 		return retorno;
 	}
 	
-	// NOVO
 	public boolean verificarExistenciaMedicoPorCpf(MedicoVO medicoVO, Connection conn) {
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -119,7 +118,6 @@ public class UsuarioDAO {
 		return usuarioVO;
 	}
 	
-	// NOVO
 	public boolean atualizar(UsuarioVO usuarioVO, Connection conn) {
 	    String query = "UPDATE usuario SET nome=?, cpf=?, email=?, login=?, senha=?, perfil=? WHERE idusuario=?";
 	    

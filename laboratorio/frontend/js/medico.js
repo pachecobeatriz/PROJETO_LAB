@@ -1,32 +1,28 @@
-// Quando página carrega → busca as requisições do médico
 document.addEventListener("DOMContentLoaded", () => {
     carregarRequisicoesDoMedico();
 });
 
 
-// FUNÇÃO
 function carregarRequisicoesDoMedico() {
 
-    const medicoId = usuarioLogado.id;
+    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-    fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${medicoId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao consultar requisições");
-            }
-            return response.json();
+    fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${usuario.idUsuario}`)
+        .then(resp => {
+            if (!resp.ok) throw new Error("Erro ao buscar requisições.");
+            return resp.json();
         })
-        .then(requisicoes => preencherTabela(requisicoes))
+        .then(lista => {
+            popularTabela(lista);
+        })
         .catch(err => {
             console.error(err);
-            alert("Erro ao carregar requisições do médico.");
+            alert("Erro ao carregar as requisições do médico.");
         });
 }
 
 
-// FUNÇÃO
-function preencherTabela(lista) {
-
+function popularTabela(lista) {
     const tbody = document.getElementById("tbody");
     tbody.innerHTML = ""; // limpa os placeholders
 
@@ -39,26 +35,37 @@ function preencherTabela(lista) {
         return;
     }
 
-    lista.forEach(req => {
+    lista.forEach(item => {
 
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
-            <td>${req.id}</td>
-            <td>${req.descricao}</td>
-            <td class="alinhamento-esquerda">${req.nomePaciente}</td>
-            <td>${req.dataRequisicao}</td>
+            <td>${item.id}</td>
+            <td>${item.numeroPedido}</td>
+            <td class="alinhamento-esquerda">${item.nome}</td>
+            <td>${formatarData(item.data)}</td>
             <td>
-                <button class="btn-visualizar" data-id="${req.id}" style="padding: 5px 15px;">
-                    Visualizar
-                </button>
+                <button onclick="verExame(${item.numeroPedido})" style="padding: 5px 15px;">Visualizar</button>
             </td>
         `;
 
         tbody.appendChild(tr);
     });
+}
 
-    // adiciona eventos aos botões
+
+function verExame(numeroPedido) {
+    sessionStorage.setItem("numeroPedidoSelecionado", numeroPedido);
+    window.location.href = "../modules/exame.html";
+}
+
+
+function formatarData(data) {
+    return data.split("-").reverse().join("/");
+}
+
+
+/* // adiciona eventos aos botões
     document.querySelectorAll(".btn-visualizar").forEach(btn => {
         btn.addEventListener("click", function () {
             const id = this.getAttribute("data-id");
@@ -69,5 +76,4 @@ function preencherTabela(lista) {
             // vai para a tela exame
             window.location.href = "../modules/exame.html";
         });
-    });
-}
+    }); */

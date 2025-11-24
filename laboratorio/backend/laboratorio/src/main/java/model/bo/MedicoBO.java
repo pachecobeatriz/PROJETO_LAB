@@ -40,22 +40,22 @@ public class MedicoBO {
 		return medicoVO;
 	}
 
+	
 	public boolean atualizar(MedicoVO medicoVO) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		MedicoDAO medicoDAO = new MedicoDAO();
 		boolean sucesso = false;
 
-		// Controle de transação JTA
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
 		Connection conn = BancoJTA.getConnectionJTA();
 
 		try {
 			userTransaction.begin();
 
-			// 1. Atualiza as colunas na tabela 'usuario' (reutiliza o método do usuário)
+			// Atualiza as colunas na tabela 'usuario'
 			boolean usuarioAtualizado = usuarioDAO.atualizar(medicoVO, conn);
 
-			// 2. Atualiza as colunas na tabela 'medico'
+			// Atualiza as colunas na tabela 'medico'
 			boolean medicoAtualizado = medicoDAO.atualizar(medicoVO, conn);
 
 			if (usuarioAtualizado && medicoAtualizado) {
@@ -63,13 +63,11 @@ public class MedicoBO {
 				sucesso = true;
 				System.out.println("Médico atualizado com sucesso!");
 			} else {
-				// Se uma das atualizações falhar, faz rollback
 				userTransaction.rollback();
 				System.out.println("Erro ao atualizar o Médico. Rollback realizado.");
 			}
 
 		} catch (Exception erro) {
-			// Garante o rollback em caso de erro
 			BancoJTA.rollbackJTA();
 			System.out.println("Erro geral na transação de atualização do Médico.");
 			System.out.println("Erro: " + erro.getMessage());

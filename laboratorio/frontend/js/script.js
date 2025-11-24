@@ -7,9 +7,8 @@ formulario.addEventListener('submit', (evento) => {
         "login": document.getElementById("login").value,
         "senha": document.getElementById("senha").value,
     }
-    //console.log(usuario);
-    realizarLogin(usuario);
 
+    realizarLogin(usuario);
 });
 
 async function realizarLogin(usuario) {
@@ -23,9 +22,9 @@ async function realizarLogin(usuario) {
         })
     };
 
-    const usuarioJson = await fetch('http://localhost:8080/laboratorio/rest/usuario/logar', options); // fetch tem 2 parâmetros; o primeiro é obrigatório e representa a URL, o segundo é opcional.
+    const usuarioJson = await fetch('http://localhost:8080/laboratorio/rest/usuario/logar', options); // FETCH tem 2 parâmetros; o primeiro é obrigatório e representa a URL, o segundo é opcional.
 
-    const usuarioLogado = await usuarioJson.json(); // pega o objeto Json e transforma em objeto JS.
+    const usuarioLogado = await usuarioJson.json(); // pega o objeto JSON e transforma em objeto JS.
 
     if (usuarioLogado.idUsuario != 0) {
         sessionStorage.setItem('usuario', JSON.stringify(usuarioLogado));

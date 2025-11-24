@@ -11,22 +11,20 @@ import model.vo.FuncionarioVO;
 public class FuncionarioBO {
 
 	public boolean atualizar(FuncionarioVO funcionarioVO) {
-		// Reutiliza o DAO de Usuário para a parte da tabela 'usuario'
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 		boolean sucesso = false;
 
-		// Controle de transação JTA
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
 		Connection conn = BancoJTA.getConnectionJTA();
 
 		try {
 			userTransaction.begin();
 
-			// 1. Atualiza as colunas na tabela 'usuario' (reutiliza o método do usuário)
+			// Atualiza as colunas na tabela 'usuario'
 			boolean usuarioAtualizado = usuarioDAO.atualizar(funcionarioVO, conn);
 
-			// 2. Atualiza as colunas na tabela 'funcionario'
+			// Atualiza as colunas na tabela 'funcionario'
 			boolean funcionarioAtualizado = funcionarioDAO.atualizar(funcionarioVO, conn);
 
 			if (usuarioAtualizado && funcionarioAtualizado) {

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/formulario.css">
     <link rel="stylesheet" href="../css/perfil.css">
 
+    <script src="../js/usuario.js" defer></script>
     <script src="../js/perfil.js" defer></script>
 </head>
 
@@ -91,6 +92,16 @@
             <div class="grupo">
                 <label for="senha">Senha:</label>
                 <input type="password" name="senha" id="senha" minlength="3" required>
+            </div>
+            
+            <div class="oculto grupo" id="grupoMatricula">
+                <label for="matricula">Matrícula:</label>
+                <input type="text" name="matricula" id="matricula">
+            </div>
+
+            <div class="oculto grupo" id="grupoCargo">
+                <label for="cargo">Cargo:</label>
+                <input type="text" name="cargo" id="cargo">
             </div>
 
             <button type="submit">ATUALIZAR</button>

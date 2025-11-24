@@ -14,14 +14,12 @@ const arquivoInput = document.getElementById("arquivo");
 const nomeArquivo = document.getElementById("nome-arquivo");
 
 
-// Nome do arquivo
 arquivoInput.addEventListener("change", () => {
     nomeArquivo.textContent =
         arquivoInput.files.length > 0 ? arquivoInput.files[0].name : "Nenhum arquivo selecionado";
 });
 
 
-// Submit do form
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -43,7 +41,6 @@ form.addEventListener("submit", async (event) => {
             formData.append("arquivo", arquivoInput.files[0]);
         }
 
-        // URL do backend (ajuste se necessário)
         const url = "http://localhost:8080/laboratorio/rest/exame/cadastrar";
 
         const resposta = await fetch(url, {
@@ -56,7 +53,6 @@ form.addEventListener("submit", async (event) => {
         if (resposta.ok) {
             alert("Exame cadastrado com sucesso!");
 
-            // Limpa formulário visualmente
             form.reset();
             nomeArquivo.textContent = "Nenhum arquivo selecionado";
 
@@ -69,7 +65,6 @@ form.addEventListener("submit", async (event) => {
         alert("Falha ao conectar com o servidor.");
     }
 });
-
 
 
 

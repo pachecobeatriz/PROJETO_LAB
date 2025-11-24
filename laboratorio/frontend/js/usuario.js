@@ -1,6 +1,6 @@
 const usuario = JSON.parse(sessionStorage.getItem('usuario'));
 
-// Se não existir usuário logado, volta pro login
+// Pra conferir se tem usuário logado | Pode tirar pra ñ ter que conectar o Back.
 if (!usuario) {
     alert("Você precisa estar logado para acessar esta página.");
     window.location.href = "../index.html";

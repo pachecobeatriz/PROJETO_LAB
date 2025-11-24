@@ -1,10 +1,8 @@
-// Quando página carrega → busca as requisições do paciente
 document.addEventListener("DOMContentLoaded", () => {
     carregarRequisicoesDoPaciente();
 });
 
 
-// FUNÇÃO
 function carregarRequisicoesDoPaciente() {
 
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
@@ -30,7 +28,6 @@ function carregarRequisicoesDoPaciente() {
 }
 
 
-// FUNÇÃO
 function popularTabela(lista) {
     const tbody = document.getElementById("tbody");
     tbody.innerHTML = "";
@@ -54,7 +51,7 @@ function popularTabela(lista) {
             <td class="alinhamento-esquerda">${item.nome}</td>
             <td>${formatarData(item.data)}</td>
             <td>
-                <button onclick="verExame(${item.numeroPedido})">Visualizar</button>
+                <button onclick="verExame(${item.numeroPedido})" style="padding: 5px 15px;">Visualizar</button>
             </td>
         `;
 
@@ -63,14 +60,12 @@ function popularTabela(lista) {
 }
 
 
-// FUNÇÃO
 function verExame(numeroPedido) {
     sessionStorage.setItem("numeroPedidoSelecionado", numeroPedido);
     window.location.href = "../modules/exame.html";
 }
 
 
-// FUNÇÃO
 function formatarData(data) {
     return data.split("-").reverse().join("/");
 }

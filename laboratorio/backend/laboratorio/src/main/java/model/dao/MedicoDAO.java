@@ -28,7 +28,6 @@ public class MedicoDAO {
 		return medicoVO;
 	}
 
-	// NOVO
 	public boolean atualizar(MedicoVO medicoVO, Connection conn) {
 		String query = "UPDATE medico SET crm=?, especialidade=? WHERE idmedico=?";
 

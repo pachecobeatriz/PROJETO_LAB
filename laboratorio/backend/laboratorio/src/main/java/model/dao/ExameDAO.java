@@ -170,13 +170,6 @@ public class ExameDAO {
 	
 	// ~ NOVAS ADIÇÕES - Sandro ~  /\
 	
-
-	/**
-	 * Cadastra um novo exame na tabela 'exame'.
-	 * 
-	 * @param exameVO O objeto VO com os dados do exame.
-	 * @return O objeto ExameVO preenchido com o ID gerado (idExame).
-	 */
 	public ExameVO cadastrar(ExameVO exameVO) {
 		String query = "INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) "
 				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -214,12 +207,6 @@ public class ExameDAO {
 		return exameVO;
 	}
 
-	/**
-	 * Atualiza um exame existente na tabela 'exame'.
-	 * 
-	 * @param exameVO O objeto VO com os novos dados e o ID do exame.
-	 * @return true se o exame foi atualizado com sucesso, false caso contrário.
-	 */
 	public boolean atualizar(ExameVO exameVO) {
 		String query = "UPDATE exame SET idpaciente=?, idmedico=?, idtipoexame=?, numeropedido=?, "
 				+ "dataexame=?, observacoes=?, status=? WHERE idexame=?";
@@ -252,12 +239,6 @@ public class ExameDAO {
 		return sucesso;
 	}
 
-	/**
-	 * Consulta o status atual de um exame pelo ID.
-	 * 
-	 * @param idExame O ID do exame a ser consultado.
-	 * @return O StatusExame atual, ou null se o exame não for encontrado.
-	 */
 	public StatusExame consultarStatus(int idExame) {
 		Connection conn = Banco.getConnection();
 		ResultSet resultado = null;
@@ -286,12 +267,6 @@ public class ExameDAO {
 		return statusAtual;
 	}
 
-	/**
-	 * Exclui um exame da tabela 'exame'.
-	 * 
-	 * @param idExame O ID do exame a ser excluído.
-	 * @return true se a exclusão foi bem-sucedida, false caso contrário.
-	 */
 	public boolean excluir(int idExame) {
 		String query = "DELETE FROM exame WHERE idexame = ?";
 
