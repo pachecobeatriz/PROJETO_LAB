@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sistema de Análises Laboratoriais</title>
+    <link rel="icon" type="image/x-icon" href="../img/logo.jpg">
+    <link rel="icon" href="data:,">
+
+    <link rel="stylesheet" href="../css/basico.css">
+    <link rel="stylesheet" href="../css/funcionario.css">
+
+    <script src="../js/usuario.js" defer></script>
+    <script src="../js/funcionario.js" defer></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="cabecalho">
+        <div class="logo">
+            <a id="principal" href="#">
+                <img class="img_logo" src="../img/logo_menu.jpg" alt="Logo da empresa">
+            </a>
+            <h2 class="marca">LabSec</h2>
+        </div>
+        <div>
+            <nav>
+                <ul>
+                    <li><a id="linkPrincipal" href="#">Principal</a></li>
+                    <li><a href="../modules/perfil.html">Perfil</a></li>
+                    <li><a href="../index.html">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- MAIN - PESQUISA -->
+        <div class="formulario" style="margin-bottom: 20px;">
+
+            <div class="grupo-requisicao">
+                <label for="idRequisicao">Número da Requisição:</label>
+
+                <input type="number" id="idRequisicao" name="idRequisicao"
+                    placeholder="Digite o número da requisição" />
+
+                <button class="botao" id="btnPesquisar">Pesquisar</button>
+                <button class="botao" id="btnLimpar">Limpar</button>
+                <button class="botao" id="btnToggle">Ocultar</button>
+            </div>
+        </div>
+
+        <!-- MAIN - FORMULÁRIO -->
+        <div class="formulario">
+            <h3>Cadastro de Exame</h3>
+
+            <form id="formExame">
+
+                <div class="grid-form">
+
+                    <div class="grupo">
+                        <label for="idPaciente">ID Paciente:</label>
+                        <input type="number" id="idPaciente" required>
+                    </div>
+
+                    <div class="grupo">
+                        <label for="idMedico">ID Médico:</label>
+                        <input type="number" id="idMedico" required>
+                    </div>
+
+                    <div class="grupo">
+                        <label for="idTipoExame">ID Tipo Exame:</label>
+                        <input type="number" id="idTipoExame" required>
+                    </div>
+
+                    <div class="grupo">
+                        <label for="dataExame">Data do Exame:</label>
+                        <input type="date" id="dataExame" required>
+                    </div>
+
+                    <div class="grupo espaco-grande">
+                        <label for="observacoes">Observações:</label>
+                        <input type="text" id="observacoes">
+                    </div>
+
+                    <div class="grupo">
+                        <label>Status do Laudo:</label>
+                        <input type="text" value="PENDENTE" disabled>
+                    </div>
+
+                    <div class="grupo">
+                        <label for="idLaudo">ID Laudo:</label>
+                        <input type="number" id="idLaudo" disabled>
+                    </div>
+
+                    <div class="grupo">
+                        <label for="dataLaudo">Data do Laudo:</label>
+                        <input type="date" id="dataLaudo">
+                    </div>
+
+                    <div class="grupo upload" style="padding-top: 0px; margin-bottom: 0px;">
+                        <label for="arquivo">Arquivo:</label>
+                        <label for="arquivo" id="botao-label" class="botao"
+                            style="margin-bottom: 0px; margin-top: -20px;">Selecionar Arquivo</label>
+                        <input type="file" id="arquivo" hidden>
+                    </div>
+
+                    <div class="grupo espaco-grande">
+                        <label>&nbsp;</label>
+                        <input type="text" id="nome-arquivo" value="Nenhum arquivo selecionado" disabled>
+                    </div>
+                </div>
+
+                <div class="botoes-centro">
+                    <button type="submit" class="botao" style="width: 50%;">Gravar</button>
+                    <button type="reset" class="botao" style="width: 50%;">Limpar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- MAIN - TABELA -->
+        <!--table>(thead>tr>(th*10))+(tbody>tr>(td*10))*1-->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID EXAME</th>
+                    <th>PACIENTE</th>
+                    <th>MÉDICO</th>
+                    <th>NOME DO EXAME</th>
+                    <th>OBSERVAÇÕES</th>
+                    <th>DATA EXAME</th>
+                    <th>STATUS</th>
+                    <th>ID LAUDO</th>
+                    <th>DATA LAUDO</th>
+                    <th>AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a><button style="padding: 5px 15px;">Editar</button></a>
+                        <!--O botão “Editar” faz o carregamento automático dos dados do exame para os campos da tela que permitirão a edição dos dados-->
+                        <a><button style="padding: 5px 15px;">Laudo</button></a>
+                        <!--O botão “Laudo” deve ser apresentado apenas quando o exame estiver com o status de pronto e 
+                        ao clicar no botão deve ser realizado o download do arquivo do laudo do exame selecionado-->
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a><button style="padding: 5px 15px;">Editar</button></a>
+                        <!-- O botão “Editar” faz o carregamento automático dos dados do exame 
+                         para os campos da tela que permitirão a edição dos dados -->
+                        <a><button style="padding: 5px 15px;">Excluir</button></a>
+                        <!-- O botão “Laudo” deve ser apresentado apenas quando o exame estiver com o status de pronto e 
+                        ao clicar no botão deve ser realizado o download do arquivo do laudo do exame selecionado -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Desenvolvido por Beatriz e Sandro</p>
+    </footer>
+
+</body>
+
+</html>

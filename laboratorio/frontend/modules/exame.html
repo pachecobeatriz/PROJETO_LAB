@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sistema de Análises Laboratoriais</title>
+    <link rel="icon" type="image/x-icon" href="../img/logo.jpg">
+    <link rel="icon" href="data:,">
+
+    <link rel="stylesheet" href="../css/basico.css">
+    <link rel="stylesheet" href="../css/exame.css">
+
+    <script src="../js/usuario.js" defer></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="cabecalho">
+        <div class="logo">
+            <a id="principal" href="#">
+                <img class="img_logo" src="../img/logo_menu.jpg" alt="Logo da empresa">
+            </a>
+            <h2 class="marca">LabSec</h2>
+        </div>
+        <div>
+            <nav>
+                <ul>
+                    <li><a id="linkPrincipal" href="#">Principal</a></li>
+                    <li><a href="../modules/perfil.html">Perfil</a></li>
+                    <li><a href="../index.html">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- MAIN - TABELA -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th class="alinhamento-esquerda">EXAME</th>
+                    <th class="alinhamento-esquerda">OBSERVAÇÕES</th>
+                    <th>DATA</th>
+                    <th>STATUS</th>
+                    <th>AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"> <!-- BACK traz os dados pra cá -->
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="alinhamento-esquerda"></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="../modules/exame.html"><button style="padding: 5px 15px;">Baixar</button></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="alinhamento-esquerda"></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="../modules/exame.html"><button style="padding: 5px 15px;">Baixar</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Desenvolvido por Beatriz e Sandro</p>
+    </footer>
+
+</body>
+
+</html>

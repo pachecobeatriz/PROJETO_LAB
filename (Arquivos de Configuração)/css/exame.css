@@ -1,0 +1,12 @@
+/* ===== TABELA ===== */
+/* Larguras das colunas */
+thead th:nth-child(1) { width: 10%; }   /* ID */
+thead th:nth-child(2) { width: 30%; }  /* Exame */
+thead th:nth-child(3) { width: 30%; }  /* Observações */
+thead th:nth-child(4) { width: 10%; }  /* Data */
+thead th:nth-child(5) { width: 10%; }  /* Status */
+thead th:nth-child(6) { width: 10%; }  /* Ações */
+
+
+
+

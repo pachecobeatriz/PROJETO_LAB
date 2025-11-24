@@ -1,0 +1,14 @@
+/* ===== TABELA ===== */
+/* Larguras das colunas */
+thead th:nth-child(1) { width: 10%; }   /* ID */
+thead th:nth-child(2) { width: 20%; }  /* Nome */
+thead th:nth-child(3) { width: 50%; }  /* Email */
+thead th:nth-child(4) { width: 10%; }  /* Telefone */
+thead th:nth-child(5) { width: 10%; }  /* Endereço */
+
+
+
+
+
+
+

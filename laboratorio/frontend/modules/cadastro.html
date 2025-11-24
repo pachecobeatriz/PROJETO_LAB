@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sistema de Análises Laboratoriais</title>
+    <link rel="icon" type="image/x-icon" href="../img/logo.jpg">
+    <link rel="icon" href="data:,">
+
+    <link rel="stylesheet" href="../css/basico.css">
+    <link rel="stylesheet" href="../css/formulario.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+
+    <script src="../js/cadastro.js" defer></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="cabecalho">
+        <div class="logo">
+            <a id="principal" href="../index.html">
+                <img class="img_logo" src="../img/logo_menu.jpg" alt="Logo da empresa">
+            </a>
+            <h2 class="marca">LabSec</h2>
+        </div>
+    </header>
+
+    <main class="principal">
+        <h2>CADASTRO</h2>
+
+        <!-- MAIN - FORMULÁRIO -->
+        <form data-formulario>
+
+            <div class="grupo">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" minlength="3" required>
+            </div>
+
+            <div class="grupo">
+                <label for="cpf">CPF:</label>
+                <input type="text" name="cpf" id="cpf" minlength="11" maxlength="14" required>
+            </div>
+
+            <div class="grupo">
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+
+            <div class="grupo">
+                <label for="perfil">Perfil:</label>
+                <select name="perfil" id="perfil" required>
+                    <option value="">Selecione...</option>
+                    <option value="PACIENTE">Paciente</option>
+                    <option value="MEDICO">Médico</option>
+                </select>
+            </div>
+
+            <div class="oculto grupo" id="grupoNascimento">
+                <label for="datanascimento">Nascimento:</label>
+                <input type="date" name="datanascimento" id="datanascimento">
+            </div>
+
+            <div class="oculto grupo" id="grupoEspecialidade">
+                <label for="especialidade">Especialidade:</label>
+                <input type="text" name="especialidade" id="especialidade">
+            </div>
+
+            <div class="oculto grupo" id="grupoCRM">
+                <label for="crm">CRM:</label>
+                <input type="text" name="crm" id="crm">
+            </div>
+
+            <div class="grupo">
+                <label for="login">Login:</label>
+                <input type="text" name="login" id="login" minlength="3" required>
+            </div>
+
+            <div class="grupo">
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" id="senha" minlength="3" required>
+            </div>
+
+            <button type="submit">CADASTRAR</button>
+        </form>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Desenvolvido por Beatriz e Sandro</p>
+    </footer>
+
+</body>
+
+</html>

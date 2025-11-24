@@ -1,0 +1,66 @@
+
+● index.html
+    .css
+    ▪ style
+
+    .js
+    ▪ script
+
+
+● cadastro.html
+    .css
+    ▪ basico
+    ▪ formulario
+    ▪ perfil
+
+    .js
+    ▫ cadastro
+
+
+● paciente.html
+    .css
+    ▪ basico
+    ▪ cliente
+
+    .js
+    ▪ usuario
+    ▪ paciente
+
+
+● medico.html
+    .css
+    ▪ basico
+    ▪ cliente
+
+    .js
+    ▪ usuario
+    ▪ medico
+
+
+● funcionario.html
+    .css
+    ▪ basico
+    ▪ funcionario
+
+    .js
+    ▪ usuario
+    ▪ funcionario
+
+
+● perfil.html
+    .css
+    ▪ basico
+    ▪ formulario
+    ▪ perfil
+
+    .js
+    ▪ perfil
+
+
+> exame.html
+    .css
+    ▪ basico
+    ▪ exame
+
+    .js
+    ▪ usuario

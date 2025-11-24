@@ -1,0 +1,113 @@
+/* ===== FORMULÁRIO ===== */
+form {
+  display: grid;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+
+.grupo {
+  display: flex;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.grupo:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Esconde os campos inicialmente */
+.oculto {
+  display: none;
+}
+
+label {
+  background-color: var(--label-bg);
+  padding: var(--padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10rem; /* Garante largura mínima */
+}
+
+/* ===== INPUTS ===== */
+input {
+  flex: 1;
+  background-color: var(--input-bg);
+  color: inherit;
+  border: none;
+  padding: var(--padding);
+  font: inherit;
+  transition: var(--transition);
+  min-height: 2rem; /* Melhora a área de toque */
+}
+
+input:focus,
+input:hover {
+  background-color: var(--input-hover);
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+/* ===== COMBO BOX (SELECT) ===== */
+select {
+  flex: 1;
+  background-color: var(--input-bg);
+  color: inherit;
+  border: none;
+  padding: var(--padding);
+  font: inherit;
+  min-height: 2rem;
+  transition: var(--transition);
+  cursor: pointer;
+  appearance: none; /* remove estilo padrão do sistema */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select:hover,
+select:focus {
+  background-color: var(--input-hover);
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+/* seta decorativa da combo */
+.grupo select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-color) 50%),
+                    linear-gradient(135deg, var(--text-color) 50%, transparent 50%);
+  background-position: calc(100% - 15px) calc(1rem), calc(100% - 10px) calc(1rem);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* ===== CAMPOS DESABILITADOS ===== */
+input:disabled,
+select:disabled {
+  background-color: #f0f0f0; /* Cinza mais claro */
+  border: 1px solid #aaaaaa;
+  cursor: not-allowed;
+}
+
+/* ===== BOTÕES ===== */
+button {
+  background-color: var(--primary);
+  color: var(--bg-color);
+  font-weight: 600;
+  padding: var(--padding);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 2.75rem;
+  box-shadow: var(--shadow);
+}
+
+button:hover,
+button:focus {
+  background-color: var(--primary-hover);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}

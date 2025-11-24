@@ -1,0 +1,141 @@
+DROP DATABASE IF EXISTS dblaboratorio;
+
+CREATE DATABASE dblaboratorio;
+
+USE dblaboratorio;
+
+-- Tabela USUARIO
+CREATE TABLE usuario (
+    idusuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL,
+    login VARCHAR(50) NOT NULL,
+    senha VARCHAR(50) NOT NULL,
+    perfil ENUM('PACIENTE', 'MEDICO', 'FUNCIONARIO') NOT NULL
+);
+
+-- Tabela PACIENTE
+CREATE TABLE paciente (
+    idpaciente INT PRIMARY KEY,
+    datanascimento DATE NOT NULL,
+    FOREIGN KEY (idpaciente) REFERENCES usuario(idusuario)
+);
+
+-- Tabela MEDICO
+CREATE TABLE medico (
+    idmedico INT PRIMARY KEY,
+    crm VARCHAR(20) NOT NULL UNIQUE,
+    especialidade VARCHAR(100),
+    FOREIGN KEY (idmedico) REFERENCES usuario(idusuario)
+);
+
+-- Tabela FUNCIONARIO
+CREATE TABLE funcionario (
+    idfuncionario INT PRIMARY KEY,
+    matricula VARCHAR(20) NOT NULL UNIQUE,
+    cargo VARCHAR(100),
+    FOREIGN KEY (idfuncionario) REFERENCES usuario(idusuario)
+);
+
+-- Tabela TIPO_EXAME
+CREATE TABLE tipo_exame (
+    idtipoexame INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Tabela EXAME
+CREATE TABLE exame (
+    idexame INT PRIMARY KEY AUTO_INCREMENT,
+    idpaciente INT NOT NULL,
+    idmedico INT NOT NULL,
+    idtipoexame INT NOT NULL,
+    numeropedido INT NOT NULL,
+    dataexame DATE NOT NULL,
+    observacoes TEXT,
+    status ENUM('PENDENTE', 'PRONTO') NOT NULL,
+    FOREIGN KEY (idpaciente) REFERENCES paciente(idpaciente),
+    FOREIGN KEY (idmedico) REFERENCES medico(idmedico),
+    FOREIGN KEY (idtipoexame) REFERENCES tipo_exame(idtipoexame)
+);
+
+-- Tabela LAUDO
+CREATE TABLE laudo (
+    idlaudo INT PRIMARY KEY AUTO_INCREMENT,
+    idexame INT NOT NULL UNIQUE,
+    arquivo LONGBLOB NOT NULL,
+    datalaudo DATE,
+    FOREIGN KEY (idexame) REFERENCES exame(idexame) ON DELETE CASCADE
+);
+
+
+
+-- CARGA DE DADOS
+
+-- TIPOS DE EXAMES
+INSERT INTO tipo_exame (nome) VALUES ("COLESTEROL HDL");
+INSERT INTO tipo_exame (nome) VALUES ("COLESTEROL LDL");
+INSERT INTO tipo_exame (nome) VALUES ("COLESTEROL TOTAL");
+INSERT INTO tipo_exame (nome) VALUES ("GLICEMIA");
+INSERT INTO tipo_exame (nome) VALUES ("HEMOGLOBINA GLICADA");
+INSERT INTO tipo_exame (nome) VALUES ("HEMOGRAMA COMPLETO");
+INSERT INTO tipo_exame (nome) VALUES ("TRIGLICERIDEOS");
+INSERT INTO tipo_exame (nome) VALUES ("VITAMINA D");
+
+-- PACIENTES
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Maria Oliveira', '12345678900', 'maria@gmail.com', 'maria', '12345', 'PACIENTE');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO paciente (idpaciente, datanascimento) VALUES (@idusuario, '1990-01-01');
+
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Jose Medeiros', '12345678901', 'jose@gmail.com', 'jose', '12345', 'PACIENTE');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO paciente (idpaciente, datanascimento) VALUES (@idusuario, '1995-06-01');
+
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Joao Nunes', '12345678902', 'joao@gmail.com', 'joao', '12345', 'PACIENTE');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO paciente (idpaciente, datanascimento) VALUES (@idusuario, '1980-12-01');
+
+
+-- MÉDICO
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Dra. Ana Silva', '98765432100', 'ana@gmail.com', 'ana', '12345', 'MEDICO');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO medico (idmedico, crm, especialidade) VALUES (@idusuario, 'CRM12345-SC', 'Cardiologia');
+
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Dr. Carlos Cruz', '98765432101', 'carlos@gmail.com', 'carlos', '12345', 'MEDICO');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO medico (idmedico, crm, especialidade) VALUES (@idusuario, 'CRM12346-SC', 'Clinico Geral');
+
+
+-- FUNCIONARIO
+INSERT INTO usuario (nome, cpf, email, login, senha, perfil) VALUES ('Adriano de Melo', '45678912300', 'adriano@gmail.com', 'adriano', '12345', 'FUNCIONARIO');
+SET @idusuario = LAST_INSERT_ID();
+INSERT INTO funcionario (idfuncionario, matricula, cargo) VALUES (@idusuario, 'MAT2025-001', 'Atendente Administrativo');
+
+
+-- EXAMES
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (1, 4, 1, 1, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (1, 4, 2, 1, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (1, 4, 3, 1, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (1, 4, 4, 1, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (1, 4, 5, 1, sysdate(), 'Jejum', 'PENDENTE');
+
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (2, 5, 4, 2, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (2, 5, 5, 2, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (2, 5, 6, 2, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (2, 5, 7, 2, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (2, 5, 8, 2, sysdate(), 'Jejum', 'PENDENTE');
+
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (3, 4, 4, 3, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (3, 4, 5, 3, sysdate(), 'Jejum', 'PENDENTE');
+INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) VALUES (3, 4, 6, 3, sysdate(), 'Jejum', 'PENDENTE');
+
+
+-- TESTES DE DADOS
+select * from usuario;
+select * from paciente;
+select * from medico;
+select * from funcionario;
+select * from tipo_exame;
+select * from exame;
+select * from laudo;
+

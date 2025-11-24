@@ -1,0 +1,205 @@
+:root{
+      --container-max-width: 95%;
+}
+
+.principal {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===== FORMULÁRIOS PADRÃO ===== */
+.formulario {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--gap);
+  margin-bottom: var(--gap-lg);
+}
+
+.formulario label {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.formulario input, .formulario span {
+  width: 100%;
+  padding: var(--padding-sm);
+  min-height: 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background-color: var(--input-bg);
+  font-size: var(--font-size-sm);
+  transition: var(--transition);
+}
+
+.formulario input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: var(--input-hover);
+}
+
+/* ===== GRID ===== */
+.grid-form{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: var(--gap);
+}
+
+.espaco-grande{
+    grid-column: 5 / 7;
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+} 
+
+.upload {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;     /* centraliza verticalmente */
+    gap: 10px;
+}
+
+#botao-label {
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+
+}
+
+#botao-label:hover {
+    background-color: var(--primary-hover);
+}
+
+#nome-arquivo {
+    font-style: italic;
+    color: var(--text-color);
+}
+
+.grupo-requisicao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.grupo-requisicao label {
+  white-space: nowrap; /* impede que o texto do label quebre linha */
+}
+
+/* ===== COMBO BOX (SELECT) ===== */
+select {
+  flex: 1;
+  background-color: var(--input-bg);
+  color: inherit;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0px 10px;
+  min-height: 1.75rem;
+  font: inherit;
+  transition: var(--transition);
+  cursor: pointer;
+  appearance: none; /* remove estilo padrão do sistema */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select:hover,
+select:focus {
+  background-color: var(--input-hover);
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+/* seta decorativa da combo */
+.grupo select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-color) 50%),
+                    linear-gradient(135deg, var(--text-color) 50%, transparent 50%);
+  background-position: calc(100% - 15px) calc(1rem), calc(100% - 10px) calc(1rem);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* ===== CAMPOS DESABILITADOS ===== */
+input:disabled,
+select:disabled {
+  background-color: #f0f0f0; /* Cinza mais claro */
+  border: 1px solid #aaaaaa;
+  cursor: not-allowed;
+}
+
+/* ===== BOTÕES ===== */
+.botao {
+  background-color: var(--primary);
+  color: var(--bg-color);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.botao:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+.botoes {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+}
+
+.botoes-centro {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap);
+  margin-top: var(--gap-lg);
+}
+
+/* ===== TITULOS ===== */
+caption{
+    font-size: 1.1rem;
+    font-weight: bolder;
+    color: var(--primary-hover);
+    margin-bottom: var(--gap);
+}
+
+
+h3 {
+  text-align: center;
+  color: var(--primary-hover);
+  margin-bottom: var(--gap);
+}
+
+
+#botao-label{
+    text-align: center;
+    padding: 7px;
+}
+
+.upload {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* ===== TABELA ===== */
+/* Larguras das colunas */
+thead th:nth-child(1) { width: 5%; }  /* ID Exame */
+thead th:nth-child(2) { width: 15%; }  /* Paciente */
+thead th:nth-child(3) { width: 15%; }  /* Médico */
+thead th:nth-child(4) { width: 15%; }  /* Nome do Exame */
+thead th:nth-child(5) { width: 15%; }  /* Observações */
+thead th:nth-child(6) { width: 5%; }  /* Data do Exame */
+thead th:nth-child(7) { width: 5%; }  /* Status */
+thead th:nth-child(8) { width: 5%; }  /* ID Laudo */
+thead th:nth-child(9) { width: 5%; }  /* Data Laudo */
+thead th:nth-child(10) { width: 15%; } /* Ações */
