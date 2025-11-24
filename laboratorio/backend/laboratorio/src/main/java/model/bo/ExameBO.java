@@ -4,6 +4,7 @@ import java.util.List;
 
 //import jakarta.validation.constraints.AssertFalse.List;
 import model.dao.ExameDAO;
+import model.dto.ExameDTO;
 import model.dto.RequisicaoExamesDTO;
 import model.enums.StatusExame;
 import model.vo.ExameVO;
@@ -95,9 +96,32 @@ public class ExameBO {
 	 * @param pacienteVO O objeto PacienteVO do usuário logado.
 	 * @return Lista de RequisicaoExamesDTO.
 	 */
-	public List<RequisicaoExamesDTO> listarRequisicoesPorPaciente(PacienteVO pacienteVO) {
+//	public List<RequisicaoExamesDTO> listarRequisicoesPorPaciente(PacienteVO pacienteVO) {
+//		ExameDAO exameDAO = new ExameDAO();
+//		return exameDAO.listarPorPaciente(pacienteVO);
+//	}
+
+	// ~ NOVAS ADIÇÕES - Sandro ~
+
+	public List<RequisicaoExamesDTO> listarRequisicoesPorPaciente(int idPaciente) {
 		ExameDAO exameDAO = new ExameDAO();
+
+		PacienteVO pacienteVO = new PacienteVO();
+		pacienteVO.setIdUsuario(idPaciente);
+
 		return exameDAO.listarPorPaciente(pacienteVO);
+	}
+
+	// LISTAGEM: requisições de exames por médico (tela principal do médico)
+	public List<RequisicaoExamesDTO> listarRequisicoesPorMedico(int idMedico) {
+		ExameDAO exameDAO = new ExameDAO();
+		return exameDAO.listarPorMedico(idMedico);
+	}
+
+	// Listagem de exames por número de requisição
+	public List<ExameDTO> listarPorRequisicao(int numeroPedido) {
+		ExameDAO exameDAO = new ExameDAO();
+		return exameDAO.listar(numeroPedido);
 	}
 
 }

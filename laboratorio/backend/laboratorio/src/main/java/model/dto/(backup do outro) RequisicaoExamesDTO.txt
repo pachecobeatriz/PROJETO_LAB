@@ -1,13 +1,15 @@
 package model.dto;
 
-public class RequisicaoExamesDTO {
+import java.time.LocalDate;
 
+public class RequisicaoExamesDTO {
+	
 	private int id;
 	private int numeroPedido;
 	private String nome;
-	private String data;
-
-	public RequisicaoExamesDTO(int id, int numeroPedido, String nome, String data) {
+	private LocalDate data;
+	
+	public RequisicaoExamesDTO(int id, int numeroPedido, String nome, LocalDate data) {
 		super();
 		this.id = id;
 		this.numeroPedido = numeroPedido;
@@ -43,11 +45,11 @@ public class RequisicaoExamesDTO {
 		this.nome = nome;
 	}
 
-	public String getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 

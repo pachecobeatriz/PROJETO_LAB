@@ -1,9 +1,11 @@
 package model.dto;
 
+import java.time.LocalDate;
+
 import model.enums.StatusExame;
 
 public class ExameDTO {
-
+	
 	private int idExame;
 	private int idPaciente;
 	private String paciente; // nome do paciente | ñ tem no VO
@@ -12,15 +14,15 @@ public class ExameDTO {
 	private int numeropedido; // tem no VO, mas a escrita está diferente
 	private int idTipoExame;
 	private String nomeExame; // ñ tem no VO
-	private String dataExame;
+	private LocalDate dataExame;
 	private String observacoes;
 	private StatusExame status;
 	private int idLaudo; // ñ tem no VO
-	private String dataLaudo; // ñ tem no VO
-
+	private LocalDate dataLaudo; // ñ tem no VO
+	
 	public ExameDTO(int idExame, int idPaciente, String paciente, int idMedico, String medico, int numeropedido,
-			int idTipoExame, String nomeExame, String dataExame, String observacoes, StatusExame status, int idLaudo,
-			String dataLaudo) {
+			int idTipoExame, String nomeExame, LocalDate dataExame, String observacoes, StatusExame status, int idLaudo,
+			LocalDate dataLaudo) {
 		super();
 		this.idExame = idExame;
 		this.idPaciente = idPaciente;
@@ -105,11 +107,11 @@ public class ExameDTO {
 		this.nomeExame = nomeExame;
 	}
 
-	public String getDataExame() {
+	public LocalDate getDataExame() {
 		return dataExame;
 	}
 
-	public void setDataExame(String dataExame) {
+	public void setDataExame(LocalDate dataExame) {
 		this.dataExame = dataExame;
 	}
 
@@ -137,12 +139,12 @@ public class ExameDTO {
 		this.idLaudo = idLaudo;
 	}
 
-	public String getDataLaudo() {
+	public LocalDate getDataLaudo() {
 		return dataLaudo;
 	}
 
-	public void setDataLaudo(String dataLaudo) {
+	public void setDataLaudo(LocalDate dataLaudo) {
 		this.dataLaudo = dataLaudo;
 	}
-
+	
 }

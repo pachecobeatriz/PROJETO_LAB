@@ -13,9 +13,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import model.bo.ExameBO;
-import model.dto.RequisicaoExamesDTO;
+import model.dto.ExameDTO;
 import model.vo.ExameVO;
-import model.vo.PacienteVO;
 
 @Path("/exame")
 public class ExameController {
@@ -87,26 +86,44 @@ public class ExameController {
 		}
 	}
 
+//	@GET
+//	@Path("/requsicoes/paciente/{idPaciente}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response listarRequisicoesPorPaciente(@PathParam("idPaciente") int idPaciente) {
+//		ExameBO exameBO = new ExameBO();
+//
+//		// Cria um PacienteVO apenas com o ID para passar ao BO
+//		PacienteVO pacienteVO = new PacienteVO();
+//		pacienteVO.setIdUsuario(idPaciente);
+//
+//		List<RequisicaoExamesDTO> listaRequisicoes = exameBO.listarRequisicoesPorPaciente(pacienteVO);
+//
+//		if (listaRequisicoes != null && !listaRequisicoes.isEmpty()) {
+//			// Retorna Status 200 OK com a lista
+//			return Response.ok(listaRequisicoes).build();
+//		} else {
+//			// Retorna 404 Not Found se não houver requisições
+//			return Response.status(Response.Status.NOT_FOUND)
+//					.entity("Nenhuma requisição encontrada para o paciente ID " + idPaciente + ".").build();
+//		}
+//	}
+
+	// ~ NOVAS ADIÇÕES - Sandro ~
+
 	@GET
-	@Path("/requsicoes/paciente/{idPaciente}")
+	@Path("/listarPorRequisicao/{numeroPedido}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listarRequisicoesPorPaciente(@PathParam("idPaciente") int idPaciente) {
+	public Response listarPorRequisicao(@PathParam("numeroPedido") int numeroPedido) {
+
 		ExameBO exameBO = new ExameBO();
+		List<ExameDTO> lista = exameBO.listarPorRequisicao(numeroPedido);
 
-		// Cria um PacienteVO apenas com o ID para passar ao BO
-		PacienteVO pacienteVO = new PacienteVO();
-		pacienteVO.setIdUsuario(idPaciente);
-
-		List<RequisicaoExamesDTO> listaRequisicoes = exameBO.listarRequisicoesPorPaciente(pacienteVO);
-
-		if (listaRequisicoes != null && !listaRequisicoes.isEmpty()) {
-			// Retorna Status 200 OK com a lista
-			return Response.ok(listaRequisicoes).build();
-		} else {
-			// Retorna 404 Not Found se não houver requisições
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity("Nenhuma requisição encontrada para o paciente ID " + idPaciente + ".").build();
+		if (lista == null) {
+			lista = java.util.Collections.emptyList();
 		}
+
+		// 200 OK com lista (vazia ou não)
+		return Response.ok(lista).build();
 	}
 
 }

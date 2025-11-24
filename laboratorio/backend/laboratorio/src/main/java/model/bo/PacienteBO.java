@@ -82,5 +82,14 @@ public class PacienteBO {
 
 		return sucesso;
 	}
+	
+	
+	// ~ NOVAS ADIÇÕES - Sandro ~
+	
+	public PacienteVO buscarPorId(int idUsuario) {
+	    PacienteDAO pacienteDAO = new PacienteDAO();
+	    return pacienteDAO.buscarPorId(idUsuario);
+	}
 
 }
+

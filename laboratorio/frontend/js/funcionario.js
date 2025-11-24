@@ -35,9 +35,9 @@ form.addEventListener("submit", async (event) => {
         formData.append("dataExame", dataExame.value);
         formData.append("observacoes", observacoes.value);
 
-        //formData.append("statusLaudo", statusLaudo.value);
-        //formData.append("idLaudo", idLaudo.value);
-        //formData.append("dataLaudo", dataLaudo.value);
+        formData.append("statusLaudo", statusLaudo.value);
+        formData.append("idLaudo", idLaudo.value);
+        formData.append("dataLaudo", dataLaudo.value);
 
         if (arquivoInput.files.length > 0) {
             formData.append("arquivo", arquivoInput.files[0]);
