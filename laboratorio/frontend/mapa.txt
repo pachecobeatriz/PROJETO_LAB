@@ -17,24 +17,14 @@
     ▫ cadastro
 
 
-● paciente.html
+● exame.html
     .css
     ▪ basico
-    ▪ cliente
+    ▪ exame
 
     .js
-    ▪ usuario
-    ▪ paciente
-
-
-● medico.html
-    .css
-    ▪ basico
-    ▪ cliente
-
-    .js
-    ▪ usuario
-    ▪ medico
+    ▫ usuario
+    ▫ exame
 
 
 ● funcionario.html
@@ -47,6 +37,26 @@
     ▪ funcionario
 
 
+● medico.html
+    .css
+    ▪ basico
+    ▪ cliente
+
+    .js
+    ▪ usuario
+    ▪ medico
+
+
+● paciente.html
+    .css
+    ▪ basico
+    ▪ cliente
+
+    .js
+    ▪ usuario
+    ▪ paciente
+
+
 ● perfil.html
     .css
     ▪ basico
@@ -56,12 +66,3 @@
     .js
     ▪ usuario
     ▪ perfil
-
-
-> exame.html
-    .css
-    ▪ basico
-    ▪ exame
-
-    .js
-    ▪ usuario
