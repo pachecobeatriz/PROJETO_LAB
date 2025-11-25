@@ -58,6 +58,14 @@ public class PacienteController {
 //	}
 
 	@GET
+	@Path("/{idUsuario}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PacienteVO buscarPorId(@PathParam("idUsuario") int idUsuario) {
+		PacienteBO pacienteBO = new PacienteBO();
+		return pacienteBO.buscarPorId(idUsuario);
+	}
+
+	@GET
 	@Path("/requisicao/{idPaciente}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listarRequisicoesPorPaciente(@PathParam("idPaciente") int idPaciente) {
@@ -70,14 +78,6 @@ public class PacienteController {
 		}
 
 		return Response.ok(lista).build();
-	}
-
-	@GET
-	@Path("/{idUsuario}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public PacienteVO buscarPorId(@PathParam("idUsuario") int idUsuario) {
-		PacienteBO pacienteBO = new PacienteBO();
-		return pacienteBO.buscarPorId(idUsuario);
 	}
 
 }

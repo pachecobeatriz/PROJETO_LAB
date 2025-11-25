@@ -4,19 +4,19 @@ import model.enums.StatusExame;
 
 public class ExameDTO {
 
-	private int idExame;
-	private int idPaciente;
-	private String paciente; // nome do paciente | ñ tem no VO
-	private int idMedico;
-	private String medico; // nome do médico | ñ tem no VO
-	private int numeropedido; // tem no VO, mas a escrita está diferente
-	private int idTipoExame;
-	private String nomeExame; // ñ tem no VO
-	private String dataExame;
-	private String observacoes;
-	private StatusExame status;
-	private int idLaudo; // ñ tem no VO
-	private String dataLaudo; // ñ tem no VO
+	private int idExame; // Exame
+	private int idPaciente; // Exame
+	private String paciente;
+	private int idMedico; // Exame
+	private String medico;
+	private int numeropedido; // Exame
+	private int idTipoExame; // TipoE
+	private String nomeExame; // TipoE
+	private String dataExame; // Exame
+	private String observacoes; // Exame
+	private StatusExame status; // Exame
+	private int idLaudo; // Laudo
+	private String dataLaudo; // Laudo
 
 	public ExameDTO(int idExame, int idPaciente, String paciente, int idMedico, String medico, int numeropedido,
 			int idTipoExame, String nomeExame, String dataExame, String observacoes, StatusExame status, int idLaudo,
