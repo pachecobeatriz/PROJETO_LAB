@@ -7,6 +7,14 @@ function carregarRequisicoesDoMedico() {
 
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
+    if (!usuario || usuario.perfil !== "MEDICO") {
+        alert("Médico não encontrado na sessão.");
+        window.location.href = "../index.html";
+        return;
+    }
+
+    /* const medicoId = usuario.idUsuario;
+    fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${medicoId} */
     fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${usuario.idUsuario}`)
         .then(resp => {
             if (!resp.ok) throw new Error("Erro ao buscar requisições.");
@@ -60,20 +68,29 @@ function verExame(numeroPedido) {
 }
 
 
-function formatarData(data) {
+/* function formatarData(data) {
     return data.split("-").reverse().join("/");
-}
+} */
+function formatarData(data) {
+    if (!data) return "";
+    // se vier "yyyy-MM-dd"
+    if (typeof data === "string" && data.includes("-")) {
+        const [ano, mes, dia] = data.split("-");
+        return `${dia}/${mes}/${ano}`;
+    }
+    return data;
+} 
 
 
-/* // adiciona eventos aos botões
-    document.querySelectorAll(".btn-visualizar").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const id = this.getAttribute("data-id");
+//adiciona eventos aos botões
+document.querySelectorAll(".btn-visualizar").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
 
-            // salva ID da requisição para exame.html
-            sessionStorage.setItem("requisicaoId", id);
+        // salva ID da requisição para exame.html
+        sessionStorage.setItem("requisicaoId", id);
 
-            // vai para a tela exame
-            window.location.href = "../modules/exame.html";
-        });
-    }); */
+        // vai para a tela exame
+        window.location.href = "../modules/exame.html";
+    });
+});

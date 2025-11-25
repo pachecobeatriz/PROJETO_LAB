@@ -10,6 +10,8 @@ import model.vo.PacienteVO;
 
 public class PacienteDAO {
 
+	// CADASTRAR...
+
 	public PacienteVO cadastrar(PacienteVO pacienteVO, Connection conn) {
 		String query = "INSERT INTO paciente (idpaciente, datanascimento) " + "VALUES(?, ?)";
 
@@ -17,12 +19,8 @@ public class PacienteDAO {
 
 		try {
 			pstmt.setInt(1, pacienteVO.getIdUsuario());
-			System.out.println("Sucesso em pstmt.setInt");
 			pstmt.setObject(2, pacienteVO.getDataNascimento());
-			System.out.println("Sucesso em pstmt.setObject");
-			pstmt.execute(); // parava aqui antes
-			System.out.println("Sucesso em pstmt.execute");
-
+			pstmt.execute();
 		} catch (Exception erro) {
 			System.out.println("PacienteDAO - Erro ao executar a query do método de cadastrar o Paciente.");
 			System.out.println("Erro: " + erro.getMessage());
@@ -30,6 +28,8 @@ public class PacienteDAO {
 
 		return pacienteVO;
 	}
+
+	// ATUALIZAR...
 
 	public boolean atualizar(PacienteVO pacienteVO, Connection conn) {
 		String query = "UPDATE paciente SET datanascimento=? WHERE idpaciente=?";
@@ -52,8 +52,8 @@ public class PacienteDAO {
 		return sucesso;
 	}
 
-	// ~ NOVAS ADIÇÕES - Sandro ~
-	
+	// 3 LISTAR...
+
 	public PacienteVO buscarPorId(int idUsuario) {
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = null;

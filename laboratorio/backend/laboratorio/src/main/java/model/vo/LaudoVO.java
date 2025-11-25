@@ -3,12 +3,12 @@ package model.vo;
 import java.time.LocalDate;
 
 public class LaudoVO {
-	
+
 	private int idLaudo;
 	private int idExame;
 	private byte[] arquivo;
 	private LocalDate dataLaudo;
-	
+
 	public LaudoVO(int idLaudo, int idExame, byte[] arquivo, LocalDate dataLaudo) {
 		super();
 		this.idLaudo = idLaudo;

@@ -10,6 +10,8 @@ import model.vo.MedicoVO;
 
 public class MedicoDAO {
 
+	// CADASTRAR...
+
 	public MedicoVO cadastrar(MedicoVO medicoVO, Connection conn) {
 		String query = "INSERT INTO medico (idmedico, crm, especialidade) " + "VALUES(?, ?, ?)";
 
@@ -27,6 +29,8 @@ public class MedicoDAO {
 
 		return medicoVO;
 	}
+
+	// ATUALIZAR...
 
 	public boolean atualizar(MedicoVO medicoVO, Connection conn) {
 		String query = "UPDATE medico SET crm=?, especialidade=? WHERE idmedico=?";
@@ -50,7 +54,7 @@ public class MedicoDAO {
 		return sucesso;
 	}
 
-	// ~ NOVAS ADIÇÕES - Sandro ~
+	// LISTAR...
 
 	public MedicoVO buscarPorId(int idUsuario) {
 		Connection conn = Banco.getConnection();

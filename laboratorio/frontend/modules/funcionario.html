@@ -89,7 +89,7 @@
 
                     <div class="grupo">
                         <label>Status do Laudo:</label>
-                        <input type="text" value="PENDENTE" disabled>
+                        <input type="text" id="statusLaudo" value="PENDENTE" disabled>
                     </div>
 
                     <div class="grupo">
@@ -152,10 +152,7 @@
                     <td></td>
                     <td>
                         <a><button style="padding: 5px 15px;">Editar</button></a>
-                        <!--O botão “Editar” faz o carregamento automático dos dados do exame para os campos da tela que permitirão a edição dos dados-->
                         <a><button style="padding: 5px 15px;">Laudo</button></a>
-                        <!--O botão “Laudo” deve ser apresentado apenas quando o exame estiver com o status de pronto e 
-                        ao clicar no botão deve ser realizado o download do arquivo do laudo do exame selecionado-->
                     </td>
                 </tr>
                 <tr>
@@ -170,11 +167,7 @@
                     <td></td>
                     <td>
                         <a><button style="padding: 5px 15px;">Editar</button></a>
-                        <!-- O botão “Editar” faz o carregamento automático dos dados do exame 
-                         para os campos da tela que permitirão a edição dos dados -->
                         <a><button style="padding: 5px 15px;">Excluir</button></a>
-                        <!-- O botão “Laudo” deve ser apresentado apenas quando o exame estiver com o status de pronto e 
-                        ao clicar no botão deve ser realizado o download do arquivo do laudo do exame selecionado -->
                     </td>
                 </tr>
             </tbody>

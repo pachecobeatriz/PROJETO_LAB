@@ -1,7 +1,11 @@
 package model.bo;
 
+import java.sql.Connection;
 import java.util.List;
 
+import javax.transaction.UserTransaction;
+
+import model.dao.BancoJTA;
 //import jakarta.validation.constraints.AssertFalse.List;
 import model.dao.ExameDAO;
 import model.dto.ExameDTO;
@@ -12,15 +16,48 @@ import model.vo.PacienteVO;
 
 public class ExameBO {
 
+	// CADASTRAR...
+
+	// POST com VO
 	public ExameVO cadastrar(ExameVO exameVO) {
 		ExameDAO exameDAO = new ExameDAO();
 
-		if (exameVO.getStatus() == null) {
-			exameVO.setStatus(StatusExame.PENDENTE);
+		UserTransaction userTransaction = BancoJTA.getUserTransaction();
+		Connection conn = BancoJTA.getConnectionJTA();
+
+		try {
+			userTransaction.begin();
+
+			if (exameDAO.verificarExistenciaExamePorId(exameVO, conn)) {
+				System.out.println("\nExame já cadastrado!");
+			} else {
+				exameVO = exameDAO.cadastrar(exameVO);
+			}
+
+			userTransaction.commit();
+
+		} catch (Exception erro) {
+			BancoJTA.rollbackJTA();
+
+		} finally {
+			BancoJTA.closeConnectionJTA(conn);
 		}
 
-		return exameDAO.cadastrar(exameVO);
+		return exameVO;
 	}
+
+//		// POST com VO mais simples
+//		public ExameVO cadastrar(ExameVO exameVO) {
+//			ExameDAO exameDAO = new ExameDAO();
+//
+//			if (exameVO.getStatus() == null) {
+//				exameVO.setStatus(StatusExame.PENDENTE);
+//			}
+//
+//			return exameDAO.cadastrar(exameVO);
+//		}
+
+	// ATUALIZAR...
 
 	public boolean atualizar(ExameVO exameVO) {
 		ExameDAO exameDAO = new ExameDAO();
@@ -33,22 +70,20 @@ public class ExameBO {
 		return exameDAO.atualizar(exameVO);
 	}
 
+	// EXCLUIR...
+
 	public String excluir(int idExame) {
 		ExameDAO exameDAO = new ExameDAO();
 
-		// Consulta o status atual do exame
 		StatusExame statusAtual = exameDAO.consultarStatus(idExame);
 
 		if (statusAtual == null) {
 			return "NAO_ENCONTRADO";
 		}
-
-		// Aplica a Regra de Negócio: Só pode excluir se for PENDENTE
 		if (statusAtual != StatusExame.PENDENTE) {
 			return "LAUDO_EXISTENTE";
 		}
 
-		// Executa a exclusão
 		boolean sucesso = exameDAO.excluir(idExame);
 
 		if (sucesso) {
@@ -56,9 +91,10 @@ public class ExameBO {
 		} else {
 			return "FALHA_DB";
 		}
+
 	}
 
-	// ~ NOVAS ADIÇÕES - Sandro ~
+	// 3 LISTAR...
 
 	public List<RequisicaoExamesDTO> listarRequisicoesPorPaciente(int idPaciente) {
 		ExameDAO exameDAO = new ExameDAO();

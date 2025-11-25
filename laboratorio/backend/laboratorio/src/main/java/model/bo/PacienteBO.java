@@ -11,7 +11,9 @@ import model.vo.PacienteVO;
 import model.vo.UsuarioVO;
 
 public class PacienteBO {
-
+	
+	// CADASTRAR...
+	
 	public PacienteVO cadastrar(PacienteVO pacienteVO) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		PacienteDAO pacienteDAO = new PacienteDAO();
@@ -24,7 +26,7 @@ public class PacienteBO {
 		try {
 			userTransaction.begin();
 
-			if (usuarioDAO.verificarExistenciaUsuarioPorCpf(pacienteVO, conn)) { // Conferindo se o user já existe.
+			if (usuarioDAO.verificarExistenciaPacientePorCpf(pacienteVO, conn)) { // Conferindo se o user já existe.
 				System.out.println("\nPaciente já cadastrado!");
 			} else {
 				UsuarioVO usuarioVO = usuarioDAO.cadastrar(pacienteVO, conn);
@@ -42,51 +44,86 @@ public class PacienteBO {
 		return pacienteVO;
 	}
 
+	// ATUALIZAR...
 	
-	public boolean atualizar(PacienteVO pacienteVO) {
-		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		PacienteDAO pacienteDAO = new PacienteDAO();
-		boolean sucesso = false;
+	// PUT com VO
+		public PacienteVO atualizar(PacienteVO pacienteVO) {
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
+			PacienteDAO pacienteDAO = new PacienteDAO();
+			PacienteVO pacienteAtualizado = null;
 
-		UserTransaction userTransaction = BancoJTA.getUserTransaction();
-		Connection conn = BancoJTA.getConnectionJTA();
+			UserTransaction userTransaction = BancoJTA.getUserTransaction();
+			Connection conn = BancoJTA.getConnectionJTA();
 
-		try {
-			userTransaction.begin();
+			try {
+				userTransaction.begin();
 
-			// Atualiza as colunas na tabela 'usuario'
-			boolean usuarioAtualizado = usuarioDAO.atualizar(pacienteVO, conn);
+				boolean usuarioAtualizado = usuarioDAO.atualizar(pacienteVO, conn);
+				boolean pacienteAtualizadoDB = pacienteDAO.atualizar(pacienteVO, conn);
 
-			// Atualiza as colunas na tabela 'paciente'
-			boolean pacienteAtualizado = pacienteDAO.atualizar(pacienteVO, conn);
+				if (usuarioAtualizado && pacienteAtualizadoDB) {
+					userTransaction.commit();
+					pacienteAtualizado = pacienteVO;
+					System.out.println("Paciente atualizado com sucesso!");
+				} else {
+					userTransaction.rollback();
+					System.out.println("Erro ao atualizar o Paciente. Rollback realizado.");
+				}
 
-			if (usuarioAtualizado && pacienteAtualizado) {
-				userTransaction.commit();
-				sucesso = true;
-				System.out.println("Paciente atualizado com sucesso!");
-			} else {
-				userTransaction.rollback();
-				System.out.println("Erro ao atualizar o Paciente. Rollback realizado.");
+			} catch (Exception erro) {
+				BancoJTA.rollbackJTA();
+				System.out.println("Erro geral na transação de atualização do Paciente.");
+				System.out.println("Erro: " + erro.getMessage());
+			} finally {
+				BancoJTA.closeConnectionJTA(conn);
 			}
 
-		} catch (Exception erro) {
-			BancoJTA.rollbackJTA();
-			System.out.println("Erro geral na transação de atualização do Paciente.");
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			BancoJTA.closeConnectionJTA(conn);
+			return pacienteAtualizado;
 		}
 
-		return sucesso;
-	}
-	
-	
-	// ~ NOVAS ADIÇÕES - Sandro ~
-	
+//		// PUT com RESPONSE
+//		public boolean atualizar(PacienteVO pacienteVO) {
+//			UsuarioDAO usuarioDAO = new UsuarioDAO();
+//			PacienteDAO pacienteDAO = new PacienteDAO();
+//			boolean sucesso = false;
+//
+//			UserTransaction userTransaction = BancoJTA.getUserTransaction();
+//			Connection conn = BancoJTA.getConnectionJTA();
+//
+//			try {
+//				userTransaction.begin();
+//
+//				// Atualiza as colunas na tabela 'usuario'
+//				boolean usuarioAtualizado = usuarioDAO.atualizar(pacienteVO, conn);
+//
+//				// Atualiza as colunas na tabela 'paciente'
+//				boolean pacienteAtualizado = pacienteDAO.atualizar(pacienteVO, conn);
+//
+//				if (usuarioAtualizado && pacienteAtualizado) {
+//					userTransaction.commit();
+//					sucesso = true;
+//					System.out.println("Paciente atualizado com sucesso!");
+//				} else {
+//					userTransaction.rollback();
+//					System.out.println("Erro ao atualizar o Paciente. Rollback realizado.");
+//				}
+//
+//			} catch (Exception erro) {
+//				BancoJTA.rollbackJTA();
+//				System.out.println("Erro geral na transação de atualização do Paciente.");
+//				System.out.println("Erro: " + erro.getMessage());
+//			} finally {
+//				BancoJTA.closeConnectionJTA(conn);
+//			}
+//
+//			return sucesso;
+//		}
+
+	// LISTAR...
+		
 	public PacienteVO buscarPorId(int idUsuario) {
-	    PacienteDAO pacienteDAO = new PacienteDAO();
-	    return pacienteDAO.buscarPorId(idUsuario);
+		PacienteDAO pacienteDAO = new PacienteDAO();
+		return pacienteDAO.buscarPorId(idUsuario);
 	}
 
 }
-

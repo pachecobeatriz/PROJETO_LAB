@@ -19,21 +19,32 @@ import model.vo.ExameVO;
 @Path("/exame")
 public class ExameController {
 
+	// POST com VO
 	@POST
 	@Path("/cadastrar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response cadastrar(ExameVO exameVO) {
+	public ExameVO cadastrar(ExameVO exameVO) {
 		ExameBO exameBO = new ExameBO();
-		ExameVO novoExame = exameBO.cadastrar(exameVO);
-
-		if (novoExame != null && novoExame.getIdExame() > 0) {
-			return Response.status(Response.Status.CREATED).entity(novoExame).build();
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("Falha ao cadastrar exame. Verifique os dados fornecidos.").build();
-		}
+		return exameBO.cadastrar(exameVO);
 	}
+
+//		// POST com RESPONSE
+//		@POST
+//		@Path("/cadastrar")
+//		@Consumes(MediaType.APPLICATION_JSON)
+//		@Produces(MediaType.APPLICATION_JSON)
+//		public Response cadastrar(ExameVO exameVO) {
+//			ExameBO exameBO = new ExameBO();
+//			ExameVO novoExame = exameBO.cadastrar(exameVO);
+	//
+//			if (novoExame != null && novoExame.getIdExame() > 0) {
+//				return Response.status(Response.Status.CREATED).entity(novoExame).build();
+//			} else {
+//				return Response.status(Response.Status.BAD_REQUEST)
+//						.entity("Falha ao cadastrar exame. Verifique os dados fornecidos.").build();
+//			}
+//		}
 
 	@PUT
 	@Path("/atualizar")
@@ -76,30 +87,6 @@ public class ExameController {
 					.entity("Erro interno ao tentar excluir o exame.").build();
 		}
 	}
-
-//	@GET
-//	@Path("/requsicoes/paciente/{idPaciente}")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response listarRequisicoesPorPaciente(@PathParam("idPaciente") int idPaciente) {
-//		ExameBO exameBO = new ExameBO();
-//
-//		// Cria um PacienteVO apenas com o ID para passar ao BO
-//		PacienteVO pacienteVO = new PacienteVO();
-//		pacienteVO.setIdUsuario(idPaciente);
-//
-//		List<RequisicaoExamesDTO> listaRequisicoes = exameBO.listarRequisicoesPorPaciente(pacienteVO);
-//
-//		if (listaRequisicoes != null && !listaRequisicoes.isEmpty()) {
-//			// Retorna Status 200 OK com a lista
-//			return Response.ok(listaRequisicoes).build();
-//		} else {
-//			// Retorna 404 Not Found se não houver requisições
-//			return Response.status(Response.Status.NOT_FOUND)
-//					.entity("Nenhuma requisição encontrada para o paciente ID " + idPaciente + ".").build();
-//		}
-//	}
-
-	// ~ NOVAS ADIÇÕES - Sandro ~
 
 	@GET
 	@Path("/listarPorRequisicao/{numeroPedido}")

@@ -12,6 +12,8 @@ import model.vo.UsuarioVO;
 
 public class MedicoBO {
 
+	// CADASTRAR...
+
 	public MedicoVO cadastrar(MedicoVO medicoVO) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		MedicoDAO medicoDAO = new MedicoDAO();
@@ -40,11 +42,13 @@ public class MedicoBO {
 		return medicoVO;
 	}
 
-	
-	public boolean atualizar(MedicoVO medicoVO) {
+	// ATUALIZAR...
+
+	// PUT com VO
+	public MedicoVO atualizar(MedicoVO medicoVO) {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		MedicoDAO medicoDAO = new MedicoDAO();
-		boolean sucesso = false;
+		MedicoVO medicoAtualizado = null; // pra MedicoVO
 
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
 		Connection conn = BancoJTA.getConnectionJTA();
@@ -52,15 +56,12 @@ public class MedicoBO {
 		try {
 			userTransaction.begin();
 
-			// Atualiza as colunas na tabela 'usuario'
 			boolean usuarioAtualizado = usuarioDAO.atualizar(medicoVO, conn);
+			boolean medicoAtualizadoDB = medicoDAO.atualizar(medicoVO, conn);
 
-			// Atualiza as colunas na tabela 'medico'
-			boolean medicoAtualizado = medicoDAO.atualizar(medicoVO, conn);
-
-			if (usuarioAtualizado && medicoAtualizado) {
+			if (usuarioAtualizado && medicoAtualizadoDB) {
 				userTransaction.commit();
-				sucesso = true;
+				medicoAtualizado = medicoVO;
 				System.out.println("Médico atualizado com sucesso!");
 			} else {
 				userTransaction.rollback();
@@ -75,10 +76,48 @@ public class MedicoBO {
 			BancoJTA.closeConnectionJTA(conn);
 		}
 
-		return sucesso;
+		return medicoAtualizado;
 	}
 
-	// ~ NOVAS ADIÇÕES - Sandro ~
+//		// PUT com RESPONSE
+//		public boolean atualizar(MedicoVO medicoVO) {
+//			UsuarioDAO usuarioDAO = new UsuarioDAO();
+//			MedicoDAO medicoDAO = new MedicoDAO();
+//			boolean sucesso = false;
+//
+//			UserTransaction userTransaction = BancoJTA.getUserTransaction();
+//			Connection conn = BancoJTA.getConnectionJTA();
+//
+//			try {
+//				userTransaction.begin();
+//
+//				// Atualiza as colunas na tabela 'usuario'
+//				boolean usuarioAtualizado = usuarioDAO.atualizar(medicoVO, conn);
+//
+//				// Atualiza as colunas na tabela 'medico'
+//				boolean medicoAtualizado = medicoDAO.atualizar(medicoVO, conn);
+//
+//				if (usuarioAtualizado && medicoAtualizado) {
+//					userTransaction.commit();
+//					sucesso = true;
+//					System.out.println("Médico atualizado com sucesso!");
+//				} else {
+//					userTransaction.rollback();
+//					System.out.println("Erro ao atualizar o Médico. Rollback realizado.");
+//				}
+//
+//			} catch (Exception erro) {
+//				BancoJTA.rollbackJTA();
+//				System.out.println("Erro geral na transação de atualização do Médico.");
+//				System.out.println("Erro: " + erro.getMessage());
+//			} finally {
+//				BancoJTA.closeConnectionJTA(conn);
+//			}
+//
+//			return sucesso;
+//		}
+
+	// LISTAR...
 
 	public MedicoVO buscarPorId(int idUsuario) {
 		MedicoDAO medicoDAO = new MedicoDAO();

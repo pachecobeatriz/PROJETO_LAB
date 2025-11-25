@@ -24,10 +24,14 @@ function ajustarCamposPorPerfil() {
     if (usuario.perfil === 'PACIENTE') {
         grupoNascimento.classList.remove('oculto');
         // aqui a gente usa formatarDataInput se já tiver feito pra paciente.
+        // const para formatar elemento dataNascimento
+        const campoData = document.getElementById('datanascimento');
+        // document.getElementById('datanascimento').value = formatarDataInput(usuario.dataNascimento)  || ""; 
 
         if (usuario.dataNascimento) {
             // se já veio do Back no login.
-            document.getElementById('datanascimento').value = usuario.dataNascimento || "";
+            //document.getElementById('datanascimento').value = usuario.dataNascimento || "";
+            campoData.value = formatarDataInput(usuario.dataNascimento);
         } else {
             // se não veio no login, daí busca no Back.
             carregarDadosPaciente();

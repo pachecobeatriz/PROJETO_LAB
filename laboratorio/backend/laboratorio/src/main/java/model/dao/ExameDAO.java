@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+//import java.util.Date;
 import model.dto.ExameDTO;
 import model.dto.RequisicaoExamesDTO;
 import model.enums.StatusExame;
@@ -14,6 +16,107 @@ import model.vo.ExameVO;
 import model.vo.PacienteVO;
 
 public class ExameDAO {
+	
+	// CADASTRAR...
+	
+	public ExameVO cadastrar(ExameVO exameVO) {
+		String query = "INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+		// Usa o método que retorna a chave gerada (idExame)
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+		ResultSet resultado = null;
+
+		try {
+			pstmt.setInt(1, exameVO.getIdPaciente());
+			pstmt.setInt(2, exameVO.getIdMedico());
+			pstmt.setInt(3, exameVO.getIdTipoExame());
+			pstmt.setInt(4, exameVO.getNumeroPedido());
+			pstmt.setObject(5, exameVO.getDataExame()); // LocalDate
+			pstmt.setString(6, exameVO.getObservacoes());
+			pstmt.setString(7, exameVO.getStatus().name());
+			pstmt.execute();
+
+			resultado = pstmt.getGeneratedKeys();
+
+			if (resultado.next()) {
+				exameVO.setIdExame(resultado.getInt(1)); // 1 é a coluna do ID gerado
+			}
+		} catch (SQLException erro) {
+			System.out.println("ExameDAO - Erro ao executar a query do método de cadastrar o Exame.");
+			System.out.println("Erro: " + erro.getMessage());
+			exameVO = null; // Indica que o cadastro falhou
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+
+		return exameVO;
+	}
+
+	// ATUALIZAR...
+	
+	public boolean atualizar(ExameVO exameVO) {
+		String query = "UPDATE exame SET idpaciente=?, idmedico=?, idtipoexame=?, numeropedido=?, "
+				+ "dataexame=?, observacoes=?, status=? WHERE idexame=?";
+
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		boolean sucesso = false;
+
+		try {
+			pstmt.setInt(1, exameVO.getIdPaciente());
+			pstmt.setInt(2, exameVO.getIdMedico());
+			pstmt.setInt(3, exameVO.getIdTipoExame());
+			pstmt.setInt(4, exameVO.getNumeroPedido());
+			pstmt.setObject(5, exameVO.getDataExame());
+			pstmt.setString(6, exameVO.getObservacoes());
+			pstmt.setString(7, exameVO.getStatus().name());
+			pstmt.setInt(8, exameVO.getIdExame()); // WHERE CLAUSE
+
+			int linhasAfetadas = pstmt.executeUpdate();
+			sucesso = (linhasAfetadas > 0);
+
+		} catch (SQLException erro) {
+			System.out.println("ExameDAO - Erro ao executar a query do método de atualizar o Exame.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+
+		return sucesso;
+	}
+	
+	// EXCLUIR...
+	
+	public boolean excluir(int idExame) {
+		String query = "DELETE FROM exame WHERE idexame = ?";
+
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		boolean sucesso = false;
+
+		try {
+			pstmt.setInt(1, idExame);
+
+			int linhasAfetadas = pstmt.executeUpdate();
+			sucesso = (linhasAfetadas > 0);
+
+		} catch (SQLException erro) {
+			System.out.println("ExameDAO - Erro ao executar a query do método de excluir o Exame.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+
+		return sucesso;
+	}
+	
+	// 3 LISTAR...
 
 	// logar como paciente, tela principal
 	public List<RequisicaoExamesDTO> listarPorPaciente(PacienteVO pacienteVO) {
@@ -55,9 +158,6 @@ public class ExameDAO {
 
 	}
 
-	
-	// ~ NOVAS ADIÇÕES - Sandro ~  \/
-	
 	// logar como médico, tela principal
 	public List<RequisicaoExamesDTO> listarPorMedico(int idMedico) {
 		Connection conn = Banco.getConnection();
@@ -83,7 +183,7 @@ public class ExameDAO {
 				requisicao.setNumeroPedido(resultado.getInt("numeropedido"));
 				requisicao.setNome(resultado.getString("nome"));
 
-				// se seu DTO estiver com String data:
+				// se o DTO estiver com String data:
 				requisicao.setData(resultado.getDate("data").toLocalDate().toString());
 
 				listaRequisicaoExames.add(requisicao);
@@ -167,76 +267,29 @@ public class ExameDAO {
 
 		return listaExames;
 	}
-	
-	// ~ NOVAS ADIÇÕES - Sandro ~  /\
-	
-	public ExameVO cadastrar(ExameVO exameVO) {
-		String query = "INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) "
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-		// Usa o método que retorna a chave gerada (idExame)
-		Connection conn = Banco.getConnection();
-		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+	// 2 OUTROS...
+	
+	public boolean verificarExistenciaExamePorId(ExameVO exameVO, Connection conn) {
+		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
+		boolean retorno = false;
+
+		String query = "SELECT idexame FROM exame WHERE idexame = '" + exameVO.getIdExame() + "' ";
 
 		try {
-			pstmt.setInt(1, exameVO.getIdPaciente());
-			pstmt.setInt(2, exameVO.getIdMedico());
-			pstmt.setInt(3, exameVO.getIdTipoExame());
-			pstmt.setInt(4, exameVO.getNumeroPedido());
-			pstmt.setObject(5, exameVO.getDataExame()); // LocalDate
-			pstmt.setString(6, exameVO.getObservacoes());
-			pstmt.setString(7, exameVO.getStatus().name());
-			pstmt.execute();
-
-			resultado = pstmt.getGeneratedKeys();
+			resultado = stmt.executeQuery(query);
 
 			if (resultado.next()) {
-				exameVO.setIdExame(resultado.getInt(1)); // 1 é a coluna do ID gerado
+				retorno = true;
 			}
-		} catch (SQLException erro) {
-			System.out.println("ExameDAO - Erro ao executar a query do método de cadastrar o Exame.");
+		} catch (Exception erro) {
+			System.out
+					.println("Erro ao executar a query do método que verifica se o Exame já existe na base de dados.");
 			System.out.println("Erro: " + erro.getMessage());
-			exameVO = null; // Indica que o cadastro falhou
-		} finally {
-			Banco.closeResultSet(resultado);
-			Banco.closePreparedStatement(pstmt);
-			Banco.closeConnection(conn);
 		}
 
-		return exameVO;
-	}
-
-	public boolean atualizar(ExameVO exameVO) {
-		String query = "UPDATE exame SET idpaciente=?, idmedico=?, idtipoexame=?, numeropedido=?, "
-				+ "dataexame=?, observacoes=?, status=? WHERE idexame=?";
-
-		Connection conn = Banco.getConnection();
-		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
-		boolean sucesso = false;
-
-		try {
-			pstmt.setInt(1, exameVO.getIdPaciente());
-			pstmt.setInt(2, exameVO.getIdMedico());
-			pstmt.setInt(3, exameVO.getIdTipoExame());
-			pstmt.setInt(4, exameVO.getNumeroPedido());
-			pstmt.setObject(5, exameVO.getDataExame());
-			pstmt.setString(6, exameVO.getObservacoes());
-			pstmt.setString(7, exameVO.getStatus().name());
-			pstmt.setInt(8, exameVO.getIdExame()); // WHERE CLAUSE
-
-			int linhasAfetadas = pstmt.executeUpdate();
-			sucesso = (linhasAfetadas > 0);
-
-		} catch (SQLException erro) {
-			System.out.println("ExameDAO - Erro ao executar a query do método de atualizar o Exame.");
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closePreparedStatement(pstmt);
-			Banco.closeConnection(conn);
-		}
-
-		return sucesso;
+		return retorno;
 	}
 
 	public StatusExame consultarStatus(int idExame) {
@@ -265,30 +318,6 @@ public class ExameDAO {
 		}
 
 		return statusAtual;
-	}
-
-	public boolean excluir(int idExame) {
-		String query = "DELETE FROM exame WHERE idexame = ?";
-
-		Connection conn = Banco.getConnection();
-		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
-		boolean sucesso = false;
-
-		try {
-			pstmt.setInt(1, idExame);
-
-			int linhasAfetadas = pstmt.executeUpdate();
-			sucesso = (linhasAfetadas > 0);
-
-		} catch (SQLException erro) {
-			System.out.println("ExameDAO - Erro ao executar a query do método de excluir o Exame.");
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closePreparedStatement(pstmt);
-			Banco.closeConnection(conn);
-		}
-
-		return sucesso;
 	}
 
 }

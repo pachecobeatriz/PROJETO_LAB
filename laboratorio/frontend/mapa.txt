@@ -1,68 +1,54 @@
 
 ● index.html
-    .css
-    ▪ style
+    ▪ style.css
 
-    .js
-    ▪ script
+    ▫ script.js
 
 
 ● cadastro.html
-    .css
-    ▪ basico
-    ▪ formulario
-    ▪ perfil
+    ▪ basico.css
+    ▪ formulario.css
+    ▪ perfil.css
 
-    .js
-    ▫ cadastro
+    ▫ cadastro.js
 
 
 ● exame.html
-    .css
-    ▪ basico
-    ▪ exame
+    ▪ basico.css
+    ▪ exame.css
 
-    .js
-    ▫ usuario
-    ▫ exame
+    ▫ usuario.js
+    ▫ exame.js
 
 
 ● funcionario.html
-    .css
-    ▪ basico
-    ▪ funcionario
+    ▪ basico.css
+    ▪ funcionario.css
 
-    .js
-    ▪ usuario
-    ▪ funcionario
+    ▫ usuario.js
+    ▫ funcionario.js
 
 
 ● medico.html
-    .css
-    ▪ basico
-    ▪ cliente
+    ▪ basico.css
+    ▪ cliente.css
 
-    .js
-    ▪ usuario
-    ▪ medico
+    ▫ usuario.js
+    ▫ medico.js
 
 
 ● paciente.html
-    .css
-    ▪ basico
-    ▪ cliente
+    ▪ basico.css
+    ▪ cliente.css
 
-    .js
-    ▪ usuario
-    ▪ paciente
+    ▫ usuario.js
+    ▫ paciente.js
 
 
 ● perfil.html
-    .css
-    ▪ basico
-    ▪ formulario
-    ▪ perfil
+    ▪ basico.css
+    ▪ formulario.css
+    ▪ perfil.css
 
-    .js
-    ▪ usuario
-    ▪ perfil
+    ▫ usuario.js
+    ▫ perfil.js
