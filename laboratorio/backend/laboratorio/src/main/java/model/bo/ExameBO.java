@@ -114,5 +114,11 @@ public class ExameBO {
 		ExameDAO exameDAO = new ExameDAO();
 		return exameDAO.listar(numeroPedido);
 	}
+	
+	// ~ NOVO - TESTE ~
+	public List<ExameDTO> listarPorIdExame(int idExame) {
+		ExameDAO exameDAO = new ExameDAO();
+		return exameDAO.listar2(idExame);
+	}
 
 }

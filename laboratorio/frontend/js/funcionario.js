@@ -30,7 +30,7 @@ function listarExamesPorRequisicao(numeroPedido) {
     const tbody = document.querySelector('table tbody');
 
     // Limpa o corpo da tabela antes de iniciar uma nova busca
-    tbody.innerHTML = ''; 
+    tbody.innerHTML = '';
 
     fetch(url)
         .then(response => {
@@ -48,15 +48,16 @@ function listarExamesPorRequisicao(numeroPedido) {
             }
 
             listaExames.forEach(exame => {
+                //const tbody = document.getElementById("tbody");
                 const tr = document.createElement('tr');
                 const statusFormatado = exame.status ? exame.status.replace('_', ' ') : '';
-                const dataLaudo = exame.dataLaudo ? exame.dataLaudo : ''; 
+                const dataLaudo = exame.dataLaudo ? exame.dataLaudo : '';
 
                 // --- LÓGICA DINÂMICA PARA OS BOTÕES DE AÇÃO ---
                 let botoesAcoes = `
                     <button style="padding: 5px 15px;" class="botao-tabela-editar" data-id="${exame.idExame}">Editar</button>
                 `;
-                
+
                 if (exame.status === 'PRONTO') {
                     // Botão Laudo: Apenas se o status for PRONTO
                     botoesAcoes += `
@@ -64,7 +65,7 @@ function listarExamesPorRequisicao(numeroPedido) {
                     `;
                 } else if (exame.status === 'PENDENTE') {
                     // Botão Excluir: Apenas se o status for PENDENTE
-                     botoesAcoes += `
+                    botoesAcoes += `
                         <button style="padding: 5px 15px;" class="botao-tabela-excluir" data-id="${exame.idExame}">Excluir</button>
                     `;
                 }
@@ -81,10 +82,10 @@ function listarExamesPorRequisicao(numeroPedido) {
                     <td>${dataLaudo}</td>
                     <td>${botoesAcoes}</td>
                 `;
-                
+
                 tbody.appendChild(tr);
             });
-            
+
             // Adiciona os event listeners após a tabela ser populada
             adicionarListenersAcoes();
 
@@ -103,11 +104,11 @@ function listarExamesPorRequisicao(numeroPedido) {
 document.addEventListener('DOMContentLoaded', () => {
     const btnPesquisar = document.getElementById('btnPesquisar');
     const inputRequisicao = document.getElementById('idRequisicao');
-    
+
     if (btnPesquisar && inputRequisicao) {
         btnPesquisar.addEventListener('click', (event) => {
             event.preventDefault(); // Evita o comportamento padrão do botão, se estiver em um form
-            
+
             const numeroPedido = parseInt(inputRequisicao.value.trim());
 
             if (isNaN(numeroPedido) || numeroPedido <= 0) {
@@ -159,11 +160,13 @@ function adicionarListenersAcoes() {
         button.addEventListener('click', (e) => {
             const idExame = e.target.getAttribute('data-id');
             if (confirm(`Tem certeza que deseja excluir o Exame ID ${idExame}?`)) {
-                 excluirExame(idExame);
+                excluirExame(idExame);
             }
         });
     });
 }
+
+
 
 
 
@@ -176,6 +179,12 @@ function adicionarListenersAcoes() {
 function carregarExameParaEdicao(idExame) {
 
 }
+
+
+
+
+
+
 
 /**
  * Envia uma requisição DELETE para excluir o exame.
@@ -191,27 +200,27 @@ function excluirExame(idExame) {
             // Adicione aqui outros headers necessários, como Tokens de Autorização
         }
     })
-    .then(response => {
-        if (response.ok) {
-            alert(`Exame ID ${idExame} excluído com sucesso.`);
-            
-            // Recarrega a lista para remover o item excluído da tabela
-            const numeroPedido = document.getElementById('idRequisicao').value.trim();
-            if (numeroPedido) {
-                listarExamesPorRequisicao(parseInt(numeroPedido));
+        .then(response => {
+            if (response.ok) {
+                alert(`Exame ID ${idExame} excluído com sucesso.`);
+
+                // Recarrega a lista para remover o item excluído da tabela
+                const numeroPedido = document.getElementById('idRequisicao').value.trim();
+                if (numeroPedido) {
+                    listarExamesPorRequisicao(parseInt(numeroPedido));
+                } else {
+                    // Se a requisição não estiver preenchida, apenas limpa a tabela
+                    document.querySelector('table tbody').innerHTML = '';
+                }
             } else {
-                // Se a requisição não estiver preenchida, apenas limpa a tabela
-                document.querySelector('table tbody').innerHTML = '';
+                // Tenta ler o corpo da resposta para uma mensagem de erro mais detalhada
+                return response.text().then(text => {
+                    throw new Error(`Falha ao excluir exame: ${response.status} - ${text || 'Erro desconhecido.'}`);
+                });
             }
-        } else {
-            // Tenta ler o corpo da resposta para uma mensagem de erro mais detalhada
-            return response.text().then(text => {
-                throw new Error(`Falha ao excluir exame: ${response.status} - ${text || 'Erro desconhecido.'}`);
-            });
-        }
-    })
-    .catch(error => {
-        console.error("Erro ao excluir exame:", error);
-        alert(`Não foi possível excluir o exame: ${error.message}`);
-    });
+        })
+        .catch(error => {
+            console.error("Erro ao excluir exame:", error);
+            alert(`Não foi possível excluir o exame: ${error.message}`);
+        });
 }

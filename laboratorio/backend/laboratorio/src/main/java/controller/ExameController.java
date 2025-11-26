@@ -47,7 +47,7 @@ public class ExameController {
 //		}
 
 	@PUT
-	@Path("/atualizar")
+	@Path("/atualizar/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response atualizar(ExameVO exameVO) {
@@ -95,6 +95,22 @@ public class ExameController {
 
 		ExameBO exameBO = new ExameBO();
 		List<ExameDTO> lista = exameBO.listarPorRequisicao(numeroPedido);
+
+		if (lista == null) {
+			lista = java.util.Collections.emptyList();
+		}
+
+		return Response.ok(lista).build();
+	}
+	
+	// ~ NOVO - TESTE ~
+	@GET
+	@Path("/listar/{idExame}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listarPorIdExame(@PathParam("idExame") int idExame) {
+
+		ExameBO exameBO = new ExameBO();
+		List<ExameDTO> lista = exameBO.listarPorIdExame(idExame);
 
 		if (lista == null) {
 			lista = java.util.Collections.emptyList();
