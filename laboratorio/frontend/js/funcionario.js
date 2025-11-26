@@ -3,6 +3,23 @@ const ENDPOINT_BASE = "http://localhost:8080/laboratorio/rest/exame/listarPorReq
 //const ENDPOINT_DOWNLOAD_LAUDO = "http://localhost:8080/laboratorio/rest/laudo/download";
 const ENDPOINT_EXCLUIR_EXAME = "http://localhost:8080/laboratorio/rest/exame/excluir";
 
+// Formulário completo
+const form = document.getElementById("formExame");
+const idPaciente = document.getElementById("idPaciente");
+const idMedico = document.getElementById("idMedico");
+const idTipoExame = document.getElementById("idTipoExame");
+const dataExame = document.getElementById("dataExame");
+const observacoes = document.getElementById("observacoes");
+const statusLaudo = document.getElementById("statusLaudo");
+const idLaudo = document.getElementById("idLaudo");
+const dataLaudo = document.getElementById("dataLaudo");
+const arquivo = document.getElementById("arquivo");
+
+const arquivoInput = document.getElementById("arquivo");
+const nomeArquivo = document.getElementById("nome-arquivo");
+
+
+
 btnToggle.addEventListener("click", toggleFormulario);
 
 function toggleFormulario() {
@@ -15,6 +32,172 @@ function toggleFormulario() {
         container.style.display = "none";
         btnToggle.textContent = "Exibir";
     }
+}
+
+
+// ~~~~~ CADASTRO 1 ~~~~~  
+/*
+// Variável global para saber se estamos editando
+let idExameEmEdicao = null;
+
+// Campos do formulário (ADICIONAR: numeroPedido para POST, e o status/idlaudo para visualização)
+const inputNumeroPedido = document.getElementById("idRequisicao");
+// ... outros inputs ...
+const inputStatusLaudo = document.getElementById("statusLaudo"); // PRECISA ADICIONAR ID NO HTML
+const inputIdLaudo = document.getElementById("idLaudo");
+// ...
+// ===============================
+// FUNÇÃO: GRAVAR EXAME (POST para novo / PUT para edição ou conclusão)
+// ===============================
+async function gravarExame(event) {
+    event.preventDefault();
+
+    // 1. Validação de Campos Obrigatórios
+    if (!idPaciente.value || !idMedico.value || !idTipoExame.value || !dataExame.value) {
+        alert("Os campos ID Paciente, ID Médico, ID Tipo Exame e Data do Exame são obrigatórios.");
+        return;
+    }
+
+    // 2. Preparar FormData para o Endpoint /gravar (POST com arquivo)
+    const formData = new FormData();
+    const urlEndpoint = "http://localhost:8080/laboratorio/rest/exame/gravar";
+
+    // Adiciona o ID do exame (0 para novo, ID para edição/conclusão)
+    formData.append("idExame", idExameEmEdicao || 0);
+
+    // Campos obrigatórios
+    formData.append("idPaciente", idPaciente.value);
+    formData.append("idMedico", idMedico.value);
+    formData.append("idTipoExame", idTipoExame.value);
+    formData.append("dataExame", dataExame.value);
+    formData.append("numeroPedido", inputRequisicao.value || 0); // Requisicao é necessária
+    formData.append("observacoes", observacoes.value || "");
+
+    // Arquivo (se existir, será CONCLUSAO)
+    if (arquivoInput.files.length > 0) {
+        formData.append("arquivo", arquivoInput.files[0]);
+    }
+
+    try {
+        const resposta = await fetch(urlEndpoint, {
+            method: "POST",
+            body: formData // Envia como Multipart
+        });
+
+        const textoResposta = await resposta.text();
+
+        if (resposta.ok) {
+            alert("Exame gravado/concluído com sucesso! \n" + textoResposta);
+
+            // 3. Após sucesso: limpar e atualizar a tabela
+            limparFormulario();
+            // Disparar pesquisa novamente para atualizar a tabela
+            if (inputRequisicao.value) {
+                pesquisarRequisicao();
+            }
+
+        } else {
+            alert("Erro ao gravar exame: " + textoResposta);
+        }
+
+    } catch (erro) {
+        console.error("Erro ao enviar:", erro);
+        alert("Falha ao conectar com o servidor.");
+    }
+}
+
+*/
+
+
+// ~~~~~ CADASTRO 2 ~~~~~  
+/*
+arquivoInput.addEventListener("change", () => {
+    nomeArquivo.textContent =
+        arquivoInput.files.length > 0 ? arquivoInput.files[0].name : "Nenhum arquivo selecionado";
+});
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+        // Cria o FormData (necessário para enviar arquivo)
+        const formData = new FormData();
+
+        formData.append("idPaciente", idPaciente.value);
+        formData.append("idMedico", idMedico.value);
+        formData.append("idTipoExame", idTipoExame.value);
+        formData.append("dataExame", dataExame.value);
+        formData.append("observacoes", observacoes.value);
+
+        formData.append("statusLaudo", statusLaudo.value);
+        formData.append("idLaudo", idLaudo.value);
+        formData.append("dataLaudo", dataLaudo.value);
+
+        if (arquivoInput.files.length > 0) {
+            formData.append("arquivo", arquivoInput.files[0]);
+        }
+
+        const url = "http://localhost:8080/laboratorio/rest/exame/cadastrar";
+
+        const resposta = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        const resultado = await resposta.json();
+
+        if (resposta.ok) {
+            alert("Exame cadastrado com sucesso!");
+
+            form.reset();
+            nomeArquivo.textContent = "Nenhum arquivo selecionado";
+
+        } else {
+            alert("Erro ao cadastrar exame: " + (resultado.mensagem || "Erro desconhecido"));
+        }
+
+    } catch (erro) {
+        console.error("Erro ao enviar:", erro);
+        alert("Falha ao conectar com o servidor.");
+    }
+});
+*/
+
+
+// ~~~~~ CADASTRO 3 ~~~~~  
+
+formExame.addEventListener("submit", gravarExame);
+
+// ===============================
+// GRAVAR EXAME
+// ===============================
+function gravarExame(event) {
+    event.preventDefault();
+
+    const dados = {
+        idPaciente: idPaciente.value,
+        idMedico: idMedico.value,
+        idTipoExame: idTipoExame.value,
+        dataExame: dataExame.value,
+        observacoes: observacoes.value,
+        statusLaudo: statusLaudo.value
+    };
+
+    fetch("http://localhost:8080/laboratorio/rest/exame/cadastrar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+    })
+        .then(resp => {
+            if (!resp.ok) throw new Error("Erro ao gravar exame.");
+            return resp.json();
+        })
+        .then(() => {
+            alert("Exame gravado com sucesso!");
+            formExame.reset();
+            nomeArquivo.value = "Nenhum arquivo selecionado";
+        })
+        .catch(() => alert("Erro ao gravar o exame."));
 }
 
 
@@ -134,10 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
 function adicionarListenersAcoes() {
     // 1. Botão Editar
     document.querySelectorAll('.botao-tabela-editar').forEach(button => {
@@ -170,17 +349,24 @@ function adicionarListenersAcoes() {
 
 
 
-
-
 /**
  * Carrega os dados de um exame da tabela para o formulário de cadastro/edição.
  * @param {string} idExame O ID do exame a ser carregado.
  */
 function carregarExameParaEdicao(idExame) {
 
+    document.getElementById('idPaciente').value = idExame.idPaciente || "";
+    document.getElementById('idMedico').value = idExame.idMedico || "";
+    document.getElementById('idTipoExame').value = idExame.idTipoExame || "";
+    document.getElementById('dataExame').value = idExame.dataExame || "";
+    document.getElementById('observacoes').value = idExame.observacoes || "hello";
+    document.getElementById('statusLaudo').value = idExame.statusLaudo || "";
+    document.getElementById('dataLaudo').value = idExame.dataLaudo || "";
+    document.getElementById('arquivo').value = idExame.arquivo || "";
+
+    btnToggle.textContent = "Ocultar";
+    formExame.parentElement.style.display = "block";
 }
-
-
 
 
 
