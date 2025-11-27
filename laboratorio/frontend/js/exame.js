@@ -1,10 +1,21 @@
 // ~ NOVAS ADIÇÕES - Sandro ~
 
+const API_BASE = "http://localhost:8080/laboratorio/rest";
+const ENDPOINT_EXAMES_REQUISICAO = `${API_BASE}/exame/listarPorRequisicao`;
+const ENDPOINT_LAUDO_DOWNLOAD   = `${API_BASE}/laudo/download`;
+
 document.addEventListener("DOMContentLoaded", () => {
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
     if (!usuario) {
         alert("Usuário não encontrado na sessão.");
+        window.location.href = "../index.html";
+        return;
+    }
+    
+    // Garante que é PACIENTE
+    if (usuario.perfil === "PACIENTE" && usuario.perfil === "MEDICO") {
+        alert("Apenas pacientes podem acessar esta tela de exames.");
         window.location.href = "../index.html";
         return;
     }
@@ -21,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function carregarExames(numeroPedido) {
-    fetch(`http://localhost:8080/laboratorio/rest/exame/listarPorRequisicao/${numeroPedido}`)
+    fetch(`${ENDPOINT_EXAMES_REQUISICAO}/${numeroPedido}`)
         .then(resp => {
             if (!resp.ok) {
                 throw new Error("Erro ao buscar exames.");
@@ -51,15 +62,26 @@ function preencherTabelaExames(lista) {
     lista.forEach(exame => {
         const tr = document.createElement("tr");
 
+        const idExame = exame.idExame || exame.id;
+        const nomeExame = exame.nomeExame || "---";
+        const obs = exame.observacoes || "---";
+        const dataExame = formatarData(exame.dataExame);
+        const status = exame.status || "---";
+        const temLaudo = exame.idLaudo && exame.idLaudo !== 0;
+
+        // Ser ou não ser, eis a questão
+        // Só pode baixar se status PRONTO e existir laudo
+        const podeBaixar = status === "PRONTO" && temLaudo;
+
         tr.innerHTML = `
-            <td>${exame.id || exame.idExame}</td>
-            <td class="alinhamento-esquerda">${exame.nomeExame || "---"}</td>
-            <td class="alinhamento-esquerda">${exame.observacoes || "---"}</td>
-            <td>${formatarData(exame.dataExame)}</td>
-            <td>${exame.status || "---"}</td>
+            <td>${idExame}</td>
+            <td class="alinhamento-esquerda">${nomeExame}</td>
+            <td class="alinhamento-esquerda">${obs}</td>
+            <td>${dataExame}</td>
+            <td>${status}</td>
             <td>
-                ${exame.idLaudo && exame.idLaudo !== 0
-                    ? `<button style="padding: 5px 15px;">Baixar</button>`
+                ${podeBaixar
+                    ? `<button class="btn-baixar" data-id-exame="${idExame}" style="padding: 5px 15px;">Baixar</button>`
                     : `---`
                 }
             </td>
@@ -67,6 +89,24 @@ function preencherTabelaExames(lista) {
 
         tbody.appendChild(tr);
     });
+
+    // Liga evento de clique nos botões "Baixar"
+    tbody.querySelectorAll(".btn-baixar").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const idExame = btn.getAttribute("data-id-exame");
+            baixarLaudo(idExame);
+        });
+    });
+}
+
+function baixarLaudo(idExame) {
+    if (!idExame) {
+        alert("Exame inválido para download do laudo.");
+        return;
+    }
+
+    // O backend ainda faz as verificações (status PRONTO + laudo existente)
+    window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
 }
 
 function formatarData(data) {
