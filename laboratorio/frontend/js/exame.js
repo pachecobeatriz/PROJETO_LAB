@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
     
-    // Garante que é PACIENTE
+    // Garante que é PACIENTE e MEDICO
+    // Precisa, não pois o FUNCIONARIO não tem navegabilidade para essa página,
+    // mas deu vontade de fazer.
     if (usuario.perfil === "PACIENTE" && usuario.perfil === "MEDICO") {
         alert("Apenas pacientes podem acessar esta tela de exames.");
         window.location.href = "../index.html";
@@ -106,6 +108,9 @@ function baixarLaudo(idExame) {
     }
 
     // O backend ainda faz as verificações (status PRONTO + laudo existente)
+    // com essa budega, não corre o risco do exame ser excluido do banco
+    // e o sistema quebrar porque não consegue fazer download, 
+    // sim eu fiz isso, kkkkk
     window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
 }
 

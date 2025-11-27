@@ -11,10 +11,10 @@ const API_BASE = "http://localhost:8080/laboratorio/rest";
 const ENDPOINT_LISTAR_REQUISICAO = `${API_BASE}/exame/listarPorRequisicao`;
 const ENDPOINT_EXCLUIR_EXAME    = `${API_BASE}/exame/excluir`;
 const ENDPOINT_LAUDO_CADASTRAR  = `${API_BASE}/laudo/cadastrar`;
+const ENDPOINT_LAUDO_DOWNLOAD   = `${API_BASE}/laudo/download`;
 // Achei mais fácil para compor o caminho!
 
-// const para o DoWNLOAD => Falta implementar
-// const ENDPOINT_LAUDO_DOWNLOAD   = `${API_BASE}/laudo/download`;
+
 
 // ===============================
 // ELEMENTOS DE TELA
@@ -365,8 +365,13 @@ function excluirExame(idExame) {
 // ===============================
 
 function baixarLaudo(idExame) {
+    if (!idExame) {
+        alert("Exame inválido para download do laudo.");
+        return;
+    }
 
-    alert("Puts! kkkkkk ,Endpoint de download de laudo ainda não implementado no backend.");
+    // Backend já verifica se o exame está PRONTO e se existe laudo
+    window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
 }
 
 // ===============================
