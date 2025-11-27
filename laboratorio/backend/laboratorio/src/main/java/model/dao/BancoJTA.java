@@ -31,7 +31,7 @@ public class BancoJTA {
             MysqlXADataSource mysqlXa = new MysqlXADataSource();
             mysqlXa.setUrl("jdbc:mysql://localhost:3306/dblaboratorio");
             mysqlXa.setUser("root");
-            mysqlXa.setPassword("root");
+            mysqlXa.setPassword("rootroot");
 
             //Cria o AtomikosDataSourceBean
             dataSource = new AtomikosDataSourceBean();

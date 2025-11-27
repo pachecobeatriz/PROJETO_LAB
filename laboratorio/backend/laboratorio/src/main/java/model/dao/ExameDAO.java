@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import model.enums.StatusExame;
 
 //import java.util.Date;
 import model.dto.ExameDTO;
@@ -16,9 +17,9 @@ import model.vo.ExameVO;
 import model.vo.PacienteVO;
 
 public class ExameDAO {
-	
+
 	// CADASTRAR...
-	
+
 	public ExameVO cadastrar(ExameVO exameVO) {
 		String query = "INSERT INTO exame (idpaciente, idmedico, idtipoexame, numeropedido, dataexame, observacoes, status) "
 				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -57,7 +58,7 @@ public class ExameDAO {
 	}
 
 	// ATUALIZAR...
-	
+
 	public boolean atualizar(ExameVO exameVO) {
 		String query = "UPDATE exame SET idpaciente=?, idmedico=?, idtipoexame=?, numeropedido=?, "
 				+ "dataexame=?, observacoes=?, status=? WHERE idexame=?";
@@ -89,9 +90,9 @@ public class ExameDAO {
 
 		return sucesso;
 	}
-	
+
 	// EXCLUIR...
-	
+
 	public boolean excluir(int idExame) {
 		String query = "DELETE FROM exame WHERE idexame = ?";
 
@@ -115,7 +116,7 @@ public class ExameDAO {
 
 		return sucesso;
 	}
-	
+
 	// 3 LISTAR...
 
 	// logar como paciente, tela principal
@@ -267,7 +268,7 @@ public class ExameDAO {
 
 		return listaExames;
 	}
-	
+
 	// ~ NOVO - TESTE ~
 	public List<ExameDTO> listar2(int idExame) {
 		Connection conn = Banco.getConnection();
@@ -328,7 +329,7 @@ public class ExameDAO {
 	// ~ ~
 
 	// 2 OUTROS...
-	
+
 	public boolean verificarExistenciaExamePorId(ExameVO exameVO, Connection conn) {
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -379,4 +380,31 @@ public class ExameDAO {
 		return statusAtual;
 	}
 
+	public boolean atualizarStatusExame(int idExame, StatusExame novoStatus) {
+		String sql = "UPDATE exame SET status = ? WHERE idexame = ?";
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		boolean sucesso = false;
+
+		try {
+			conn = Banco.getConnection();
+			pstmt = Banco.getPreparedStatement(conn, sql);
+
+			pstmt.setString(1, novoStatus.name()); // "PENDENTE" ou "PRONTO"
+			pstmt.setInt(2, idExame);
+
+			int linhasAfetadas = pstmt.executeUpdate();
+			sucesso = (linhasAfetadas > 0);
+
+		} catch (SQLException e) {
+			System.out.println("ExameDAO - Erro ao atualizar status do exame.");
+			System.out.println("Erro: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+
+		return sucesso;
+	}
 }

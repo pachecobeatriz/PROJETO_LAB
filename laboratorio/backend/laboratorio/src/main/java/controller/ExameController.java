@@ -16,6 +16,7 @@ import model.bo.ExameBO;
 import model.dto.ExameDTO;
 import model.vo.ExameVO;
 
+
 @Path("/exame")
 public class ExameController {
 
