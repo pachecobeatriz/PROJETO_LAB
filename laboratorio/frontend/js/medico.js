@@ -1,8 +1,12 @@
+/* Inicialização do processo.
+Faz o código dentro da função só ser executado após o HTML ser carregado.
+ */
 document.addEventListener("DOMContentLoaded", () => {
     carregarRequisicoesDoMedico();
 });
 
 
+// Busca de dados do médico e verificação/validação de sessão.
 function carregarRequisicoesDoMedico() {
 
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
@@ -13,8 +17,7 @@ function carregarRequisicoesDoMedico() {
         return;
     }
 
-    /* const medicoId = usuario.idUsuario;
-    fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${medicoId} */
+    // Comunicação com o Back e tratamento de erros.
     fetch(`http://localhost:8080/laboratorio/rest/medico/requisicao/${usuario.idUsuario}`)
         .then(resp => {
             if (!resp.ok) throw new Error("Erro ao buscar requisições.");
@@ -30,6 +33,7 @@ function carregarRequisicoesDoMedico() {
 }
 
 
+// Renderização da tabela de requisições.
 function popularTabela(lista) {
     const tbody = document.getElementById("tbody");
     tbody.innerHTML = ""; // limpa os placeholders
@@ -43,17 +47,17 @@ function popularTabela(lista) {
         return;
     }
 
-    lista.forEach(item => {
+    lista.forEach(requisicao => {
 
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.numeroPedido}</td>
-            <td class="alinhamento-esquerda">${item.nome}</td>
-            <td>${formatarData(item.data)}</td>
+            <td>${requisicao.id}</td>
+            <td>${requisicao.numeroPedido}</td>
+            <td class="alinhamento-esquerda">${requisicao.nome}</td>
+            <td>${formatarData(requisicao.data)}</td>
             <td>
-                <button onclick="verExame(${item.numeroPedido})" style="padding: 5px 15px;">Visualizar</button>
+                <button onclick="verExame(${requisicao.numeroPedido})" style="padding: 5px 15px;">Visualizar</button>
             </td>
         `;
 
@@ -62,15 +66,14 @@ function popularTabela(lista) {
 }
 
 
+// Vai para a página de exames.
 function verExame(numeroPedido) {
     sessionStorage.setItem("numeroPedidoSelecionado", numeroPedido);
     window.location.href = "../modules/exame.html";
 }
 
 
-/* function formatarData(data) {
-    return data.split("-").reverse().join("/");
-} */
+// Converte "yyyy-MM-dd" -> "dd/MM/yyyy" para exibição em tabela.
 function formatarData(data) {
     if (!data) return "";
     // se vier "yyyy-MM-dd"
@@ -79,18 +82,4 @@ function formatarData(data) {
         return `${dia}/${mes}/${ano}`;
     }
     return data;
-} 
-
-
-//adiciona eventos aos botões
-document.querySelectorAll(".btn-visualizar").forEach(btn => {
-    btn.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-
-        // salva ID da requisição para exame.html
-        sessionStorage.setItem("requisicaoId", id);
-
-        // vai para a tela exame
-        window.location.href = "../modules/exame.html";
-    });
-});
+}

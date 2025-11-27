@@ -1,3 +1,4 @@
+// Seleção e inicialização de elementos
 const formulario = document.querySelector('[data-formulario]');
 
 const perfilSelecionado = document.getElementById('perfil');
@@ -8,7 +9,7 @@ const grupoCRM = document.getElementById('grupoCRM');
 perfilSelecionado.value = "";
 
 
-// EventListener
+// Controle de visibilidade dos campos
 perfilSelecionado.addEventListener('change', () => {
     grupoNascimento.classList.add('oculto');
     grupoEspecialidade.classList.add('oculto');
@@ -21,10 +22,9 @@ perfilSelecionado.addEventListener('change', () => {
         grupoCRM.classList.remove('oculto');
     }
 });
-console.log("passou por perfilSelecionado.addEventListener") // teste
 
 
-// EventListener
+// Tratamento da submissão e coleta de dados
 formulario.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
@@ -45,14 +45,12 @@ formulario.addEventListener('submit', (evento) => {
 
     realizarCadastro(usuario);
 });
-console.log("passou por formulario.addEventListener") // teste
 
 
-// FUNÇÃO de CADASTRO
+// Envio e conclusão do cadastro
 async function realizarCadastro(usuario) {
     let url;
     let corpo;
-    console.log("entrou em async function realizarCadastro") // teste
 
     if (usuario.perfil === 'PACIENTE') {
         url = 'http://localhost:8080/laboratorio/rest/paciente/cadastrar';
@@ -64,7 +62,7 @@ async function realizarCadastro(usuario) {
             dataNascimento: usuario.dataNascimento,
             login: usuario.login,
             senha: usuario.senha
-        }); console.log("passou por if do paciente") // teste
+        });
     } else if (usuario.perfil === 'MEDICO') {
         url = 'http://localhost:8080/laboratorio/rest/medico/cadastrar';
         corpo = JSON.stringify({
@@ -76,7 +74,7 @@ async function realizarCadastro(usuario) {
             crm: usuario.crm,
             login: usuario.login,
             senha: usuario.senha
-        }); console.log("passou por if do medico") // teste
+        });
     }
 
     let options = {
@@ -84,18 +82,14 @@ async function realizarCadastro(usuario) {
         headers: { 'Content-type': 'application/json' },
         body: corpo
     }
-    console.log("passou por let options") // teste
 
     const usuarioJson = await fetch(url, options);
-    console.log("passou por usuarioJson") // teste
     const usuarioCadastrado = await usuarioJson.json();
-    console.log("passou por usuarioCadastrado") // teste
 
     console.log("Enviando para o backend:", corpo); // teste
     console.log("RESPOSTA DO BACK:", usuarioCadastrado); // teste
 
     if (usuarioCadastrado.idUsuario != 0) {
-        console.log("entra no IF") // teste
         alert("Usuário cadastrado com sucesso!");
         formulario.reset();
         window.location.href = '../index.html';

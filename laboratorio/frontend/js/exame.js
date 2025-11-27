@@ -1,9 +1,9 @@
-// ~ NOVAS ADIÇÕES - Sandro ~
-
+// Configuração de endpoints.
 const API_BASE = "http://localhost:8080/laboratorio/rest";
 const ENDPOINT_EXAMES_REQUISICAO = `${API_BASE}/exame/listarPorRequisicao`;
-const ENDPOINT_LAUDO_DOWNLOAD   = `${API_BASE}/laudo/download`;
+const ENDPOINT_LAUDO_DOWNLOAD = `${API_BASE}/laudo/download`;
 
+// Inicialização, validação de sessão e contexto.
 document.addEventListener("DOMContentLoaded", () => {
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
@@ -12,12 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "../index.html";
         return;
     }
-    
-    // Garante que é PACIENTE e MEDICO
-    // Precisa, não pois o FUNCIONARIO não tem navegabilidade para essa página,
-    // mas deu vontade de fazer.
-    if (usuario.perfil === "PACIENTE" && usuario.perfil === "MEDICO") {
-        alert("Apenas pacientes podem acessar esta tela de exames.");
+
+    /* Garante que é PACIENTE ou MEDICO.
+    Não precisa, pois o FUNCIONARIO não tem navegabilidade para essa página, mas deu vontade de fazer.
+    */
+    if (usuario.perfil === "FUNCIONARIO" || !usuario.perfil === "PACIENTE" || !usuario.perfil === "MEDICO") {
+        alert("Apenas pacientes ou médicos podem acessar esta tela de exames.");
         window.location.href = "../index.html";
         return;
     }
@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarExames(numeroPedido);
 });
 
+
+// Busca de dados da requisição.
 function carregarExames(numeroPedido) {
     fetch(`${ENDPOINT_EXAMES_REQUISICAO}/${numeroPedido}`)
         .then(resp => {
@@ -48,6 +50,8 @@ function carregarExames(numeroPedido) {
         });
 }
 
+
+// Renderização da tabela de exames e ações.
 function preencherTabelaExames(lista) {
     const tbody = document.getElementById("tbody");
     tbody.innerHTML = "";
@@ -83,9 +87,9 @@ function preencherTabelaExames(lista) {
             <td>${status}</td>
             <td>
                 ${podeBaixar
-                    ? `<button class="btn-baixar" data-id-exame="${idExame}" style="padding: 5px 15px;">Baixar</button>`
-                    : `---`
-                }
+                ? `<button class="btn-baixar" data-id-exame="${idExame}" style="padding: 5px 15px;">Baixar</button>`
+                : `---`
+            }
             </td>
         `;
 
@@ -101,19 +105,8 @@ function preencherTabelaExames(lista) {
     });
 }
 
-function baixarLaudo(idExame) {
-    if (!idExame) {
-        alert("Exame inválido para download do laudo.");
-        return;
-    }
 
-    // O backend ainda faz as verificações (status PRONTO + laudo existente)
-    // com essa budega, não corre o risco do exame ser excluido do banco
-    // e o sistema quebrar porque não consegue fazer download, 
-    // sim eu fiz isso, kkkkk
-    window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
-}
-
+// Formatador de datas.
 function formatarData(data) {
     if (!data) return "";
 
@@ -123,4 +116,18 @@ function formatarData(data) {
     }
 
     return data;
+}
+
+
+// Download do laudo e utilitárioss
+function baixarLaudo(idExame) {
+    if (!idExame) {
+        alert("Exame inválido para download do laudo.");
+        return;
+    }
+
+    /* O backend ainda faz as verificações (status PRONTO + laudo existente).
+    Com isso aqui, não corre o risco do exame ser excluido do banco e o sistema quebrar porque não consegue fazer download
+    */
+    window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
 }

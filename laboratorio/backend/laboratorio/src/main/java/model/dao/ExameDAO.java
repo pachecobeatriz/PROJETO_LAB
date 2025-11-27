@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.enums.StatusExame;
 
-//import java.util.Date;
 import model.dto.ExameDTO;
 import model.dto.RequisicaoExamesDTO;
 import model.enums.StatusExame;
@@ -75,7 +73,7 @@ public class ExameDAO {
 			pstmt.setObject(5, exameVO.getDataExame());
 			pstmt.setString(6, exameVO.getObservacoes());
 			pstmt.setString(7, exameVO.getStatus().name());
-			pstmt.setInt(8, exameVO.getIdExame()); // WHERE CLAUSE
+			pstmt.setInt(8, exameVO.getIdExame()); // where
 
 			int linhasAfetadas = pstmt.executeUpdate();
 			sucesso = (linhasAfetadas > 0);
@@ -236,74 +234,9 @@ public class ExameDAO {
 				dto.setIdTipoExame(resultado.getInt("idtipoexame"));
 				dto.setNomeExame(resultado.getString("nomeExame"));
 				dto.setNumeropedido(resultado.getInt("numeropedido"));
-
-				// Aqui eu assumo que você FEZ a troca de LocalDate -> String em ExameDTO
 				dto.setDataExame(resultado.getDate("dataexame").toLocalDate().toString());
 				dto.setObservacoes(resultado.getString("observacoes"));
-
-				// Enum StatusExame
 				dto.setStatus(StatusExame.valueOf(resultado.getString("status")));
-
-				// Laudo (pode ser nulo)
-				dto.setIdLaudo(resultado.getInt("idlaudo"));
-				if (resultado.wasNull()) {
-					dto.setIdLaudo(0); // se quiser tratar 0 como "sem laudo"
-				}
-
-				java.sql.Date dataLaudoSql = resultado.getDate("datalaudo");
-				if (dataLaudoSql != null) {
-					dto.setDataLaudo(dataLaudoSql.toLocalDate().toString());
-				}
-
-				listaExames.add(dto);
-			}
-		} catch (SQLException erro) {
-			System.out.println("ExameDAO - Erro ao listar exames por número de requisição.");
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closeResultSet(resultado);
-			Banco.closePreparedStatement(pstmt);
-			Banco.closeConnection(conn);
-		}
-
-		return listaExames;
-	}
-
-	// ~ NOVO - TESTE ~
-	public List<ExameDTO> listar2(int idExame) {
-		Connection conn = Banco.getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet resultado = null;
-
-		List<ExameDTO> listaExames = new ArrayList<>();
-
-		String query = "SELECT e.idexame, " + "       e.idpaciente, " + "       uPac.nome      AS nomePaciente, "
-				+ "       e.idmedico, " + "       uMed.nome      AS nomeMedico, " + "       e.idtipoexame, "
-				+ "       t.nome         AS nomeExame, " + "       e.numeropedido, " + "       e.dataexame, "
-				+ "       e.observacoes, " + "       e.status, " + "       l.idlaudo, " + "       l.datalaudo "
-				+ "FROM exame e " + "JOIN paciente p    ON e.idpaciente = p.idpaciente "
-				+ "JOIN usuario uPac  ON p.idpaciente = uPac.idusuario "
-				+ "JOIN medico m      ON e.idmedico = m.idmedico "
-				+ "JOIN usuario uMed  ON m.idmedico = uMed.idusuario "
-				+ "JOIN tipo_exame t  ON e.idtipoexame = t.idtipoexame "
-				+ "LEFT JOIN laudo l  ON e.idexame = l.idexame " + "WHERE e.numeropedido = ? " + "ORDER BY e.idexame";
-
-		try {
-			pstmt = Banco.getPreparedStatement(conn, query);
-			pstmt.setInt(1, idExame);
-			resultado = pstmt.executeQuery();
-
-			while (resultado.next()) {
-				ExameDTO dto = new ExameDTO();
-				dto.setIdPaciente(resultado.getInt("idpaciente"));
-				dto.setIdMedico(resultado.getInt("idmedico"));
-				dto.setIdTipoExame(resultado.getInt("idtipoexame"));
-				// Aqui eu assumo que você FEZ a troca de LocalDate -> String em ExameDTO
-				dto.setDataExame(resultado.getDate("dataexame").toLocalDate().toString());
-				dto.setObservacoes(resultado.getString("observacoes"));
-				// Enum StatusExame
-				dto.setStatus(StatusExame.valueOf(resultado.getString("status")));
-				// Laudo (pode ser nulo)
 				dto.setIdLaudo(resultado.getInt("idlaudo"));
 				if (resultado.wasNull()) {
 					dto.setIdLaudo(0); // se quiser tratar 0 como "sem laudo"
@@ -326,7 +259,6 @@ public class ExameDAO {
 
 		return listaExames;
 	}
-	// ~ ~
 
 	// 2 OUTROS...
 

@@ -16,7 +16,6 @@ import model.bo.ExameBO;
 import model.dto.ExameDTO;
 import model.vo.ExameVO;
 
-
 @Path("/exame")
 public class ExameController {
 
@@ -29,23 +28,6 @@ public class ExameController {
 		ExameBO exameBO = new ExameBO();
 		return exameBO.cadastrar(exameVO);
 	}
-
-//		// POST com RESPONSE
-//		@POST
-//		@Path("/cadastrar")
-//		@Consumes(MediaType.APPLICATION_JSON)
-//		@Produces(MediaType.APPLICATION_JSON)
-//		public Response cadastrar(ExameVO exameVO) {
-//			ExameBO exameBO = new ExameBO();
-//			ExameVO novoExame = exameBO.cadastrar(exameVO);
-	//
-//			if (novoExame != null && novoExame.getIdExame() > 0) {
-//				return Response.status(Response.Status.CREATED).entity(novoExame).build();
-//			} else {
-//				return Response.status(Response.Status.BAD_REQUEST)
-//						.entity("Falha ao cadastrar exame. Verifique os dados fornecidos.").build();
-//			}
-//		}
 
 	@PUT
 	@Path("/atualizar/{id}")
@@ -103,21 +85,22 @@ public class ExameController {
 
 		return Response.ok(lista).build();
 	}
-	
-	// ~ NOVO - TESTE ~
-	@GET
-	@Path("/listar/{idExame}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response listarPorIdExame(@PathParam("idExame") int idExame) {
 
-		ExameBO exameBO = new ExameBO();
-		List<ExameDTO> lista = exameBO.listarPorIdExame(idExame);
-
-		if (lista == null) {
-			lista = java.util.Collections.emptyList();
-		}
-
-		return Response.ok(lista).build();
-	}
+//	// POST com RESPONSE
+//	@POST
+//	@Path("/cadastrar")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response cadastrar(ExameVO exameVO) {
+//		ExameBO exameBO = new ExameBO();
+//		ExameVO novoExame = exameBO.cadastrar(exameVO);
+//
+//		if (novoExame != null && novoExame.getIdExame() > 0) {
+//			return Response.status(Response.Status.CREATED).entity(novoExame).build();
+//		} else {
+//			return Response.status(Response.Status.BAD_REQUEST)
+//					.entity("Falha ao cadastrar exame. Verifique os dados fornecidos.").build();
+//		}
+//	}
 
 }

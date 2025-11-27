@@ -46,17 +46,6 @@ public class ExameBO {
 		return exameVO;
 	}
 
-//		// POST com VO mais simples
-//		public ExameVO cadastrar(ExameVO exameVO) {
-//			ExameDAO exameDAO = new ExameDAO();
-//
-//			if (exameVO.getStatus() == null) {
-//				exameVO.setStatus(StatusExame.PENDENTE);
-//			}
-//
-//			return exameDAO.cadastrar(exameVO);
-//		}
-
 	// ATUALIZAR...
 
 	public boolean atualizar(ExameVO exameVO) {
@@ -114,11 +103,16 @@ public class ExameBO {
 		ExameDAO exameDAO = new ExameDAO();
 		return exameDAO.listar(numeroPedido);
 	}
-	
-	// ~ NOVO - TESTE ~
-	public List<ExameDTO> listarPorIdExame(int idExame) {
-		ExameDAO exameDAO = new ExameDAO();
-		return exameDAO.listar2(idExame);
-	}
+
+//	// POST com VO mais simples
+//	public ExameVO cadastrar(ExameVO exameVO) {
+//		ExameDAO exameDAO = new ExameDAO();
+//
+//		if (exameVO.getStatus() == null) {
+//			exameVO.setStatus(StatusExame.PENDENTE);
+//		}
+//
+//		return exameDAO.cadastrar(exameVO);
+//	}
 
 }

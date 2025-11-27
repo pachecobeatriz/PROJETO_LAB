@@ -79,6 +79,13 @@ public class MedicoBO {
 		return medicoAtualizado;
 	}
 
+	// LISTAR...
+
+	public MedicoVO buscarPorId(int idUsuario) {
+		MedicoDAO medicoDAO = new MedicoDAO();
+		return medicoDAO.buscarPorId(idUsuario);
+	}
+
 //		// PUT com RESPONSE
 //		public boolean atualizar(MedicoVO medicoVO) {
 //			UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -116,12 +123,5 @@ public class MedicoBO {
 //
 //			return sucesso;
 //		}
-
-	// LISTAR...
-
-	public MedicoVO buscarPorId(int idUsuario) {
-		MedicoDAO medicoDAO = new MedicoDAO();
-		return medicoDAO.buscarPorId(idUsuario);
-	}
 
 }

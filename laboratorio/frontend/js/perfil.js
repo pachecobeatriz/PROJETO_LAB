@@ -1,3 +1,4 @@
+// Inicialização e seleção de elementos.
 const formulario = document.querySelector('[data-formulario]');
 const grupoNascimento = document.getElementById('grupoNascimento');
 const grupoEspecialidade = document.getElementById('grupoEspecialidade');
@@ -5,6 +6,8 @@ const grupoCRM = document.getElementById('grupoCRM');
 const grupoMatricula = document.getElementById('grupoMatricula');
 const grupoCargo = document.getElementById('grupoCargo');
 
+
+// Preenchimento inicial dos campos comuns.
 if (document.getElementById('nome')) {
     document.getElementById('nome').value = usuario.nome || "";
     document.getElementById('cpf').value = usuario.cpf || "";
@@ -14,6 +17,8 @@ if (document.getElementById('nome')) {
     document.getElementById('senha').value = usuario.senha || "";
 }
 
+
+// Ajuste e carregamento de campos específicos.
 function ajustarCamposPorPerfil() {
     grupoNascimento.classList.add('oculto');
     grupoEspecialidade.classList.add('oculto');
@@ -23,17 +28,13 @@ function ajustarCamposPorPerfil() {
 
     if (usuario.perfil === 'PACIENTE') {
         grupoNascimento.classList.remove('oculto');
-        // aqui a gente usa formatarDataInput se já tiver feito pra paciente.
-        // const para formatar elemento dataNascimento
         const campoData = document.getElementById('datanascimento');
-        // document.getElementById('datanascimento').value = formatarDataInput(usuario.dataNascimento)  || ""; 
 
         if (usuario.dataNascimento) {
-            // se já veio do Back no login.
-            //document.getElementById('datanascimento').value = usuario.dataNascimento || "";
+            // se já veio do Back no login
             campoData.value = formatarDataInput(usuario.dataNascimento);
         } else {
-            // se não veio no login, daí busca no Back.
+            // se não veio no login, daí busca no Back
             carregarDadosPaciente();
         }
 
@@ -42,22 +43,22 @@ function ajustarCamposPorPerfil() {
         grupoCRM.classList.remove('oculto');
 
         if (usuario.especialidade || usuario.crm) {
-            // se já veio do Back no login.
+            // se já veio do Back no login
             document.getElementById('especialidade').value = usuario.especialidade || "";
             document.getElementById('crm').value = usuario.crm || "";
         } else {
-            // se não veio no login, daí busca no Back.
+            // se não veio no login, daí busca no Back
             carregarDadosMedico();
         }
 
     } else if (usuario.perfil === 'FUNCIONARIO') {
 
         if (usuario.matricula || usuario.cargo) {
-            // se já veio do Back no login.
+            // se já veio do Back no login
             document.getElementById('matricula').value = usuario.matricula || "";
             document.getElementById('cargo').value = usuario.cargo || "";
         } else {
-            // se não veio no login, daí busca no Back.
+            // se não veio no login, daí busca no Back
             carregarDadosFuncionario();
         }
     }
@@ -66,8 +67,7 @@ function ajustarCamposPorPerfil() {
 ajustarCamposPorPerfil();
 
 
-// ATUALIZAÇÃO do Usuário ~
-// Form...
+// Atualização de perfil (submissão do formulário).
 if (formulario) {
     formulario.addEventListener('submit', async (evento) => {
         evento.preventDefault();
@@ -96,7 +96,7 @@ if (formulario) {
     });
 }
 
-// Função...
+// Determina a URL de PUT correta.
 async function atualizarUsuario(usuarioAtualizado) {
     let url;
 
@@ -130,9 +130,7 @@ async function atualizarUsuario(usuarioAtualizado) {
     }
 }
 
-
-// Parte que carrega os dados ~
-// Paciente...
+// Compõe o ajustarCamposPorPerfil (Paciente).
 async function carregarDadosPaciente() {
     try {
         const resposta = await fetch(`http://localhost:8080/laboratorio/rest/paciente/${usuario.idUsuario}`);
@@ -159,7 +157,7 @@ async function carregarDadosPaciente() {
     }
 }
 
-// Médico...
+// Compõe o ajustarCamposPorPerfil (Medico).
 async function carregarDadosMedico() {
     try {
         const resposta = await fetch(`http://localhost:8080/laboratorio/rest/medico/${usuario.idUsuario}`);
@@ -187,7 +185,7 @@ async function carregarDadosMedico() {
     }
 }
 
-// Funcionário...
+// Compõe o ajustarCamposPorPerfil (Funcionario).
 async function carregarDadosFuncionario() {
     try {
         const resposta = await fetch(`http://localhost:8080/laboratorio/rest/funcionario/${usuario.idUsuario}`);
@@ -215,32 +213,26 @@ async function carregarDadosFuncionario() {
     }
 }
 
-
-// Formatador de datas ~
+// Formatador de datas.
 function formatarDataInput(data) {
     if (!data) return "";
-
     // Se vier como string "yyyy-MM-dd" -> já serve pro input date
     if (typeof data === "string") {
         if (/^\d{4}-\d{2}-\d{2}$/.test(data)) {
             return data;
         }
-
         // Se vier "dd/MM/yyyy"
         if (/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
             const [dia, mes, ano] = data.split("/");
             return `${ano}-${mes}-${dia}`;
         }
-
         return data; // fallback
     }
-
     // Se vier como array [ano, mes, dia] (caso Jackson invente moda)
     if (Array.isArray(data)) {
         const [ano, mes, dia] = data;
         return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
     }
-
     // Se vier objeto {year, monthValue, dayOfMonth}
     if (typeof data === "object") {
         const ano = data.year ?? data.ano;
@@ -251,7 +243,5 @@ function formatarDataInput(data) {
             return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
         }
     }
-
     return "";
 }
-

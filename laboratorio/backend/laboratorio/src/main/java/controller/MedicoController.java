@@ -35,35 +35,15 @@ public class MedicoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response atualizar(MedicoVO medicoVO) {
 		MedicoBO medicoBO = new MedicoBO();
-		// Chama o método BO que agora retorna MedicoVO ou null
 		MedicoVO medicoAtualizado = medicoBO.atualizar(medicoVO);
 
 		if (medicoAtualizado != null) {
-			// 200
 			return Response.ok(medicoAtualizado).build();
 		} else {
-			// 500
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Falha ao atualizar o médico devido a um erro de transação.").build();
 		}
 	}
-
-//	// PUT com RESPONSE
-//	@PUT
-//	@Path("/atualizar")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response atualizar(MedicoVO medicoVO) {
-//		MedicoBO medicoBO = new MedicoBO();
-//		boolean sucesso = medicoBO.atualizar(medicoVO);
-//
-//		if (sucesso) {
-//			return Response.ok("Médico atualizado com sucesso.").build();
-//		} else {
-//			return Response.status(Response.Status.BAD_REQUEST)
-//					.entity("Falha ao atualizar o médico. Verifique o ID e os dados.").build();
-//		}
-//	}
 
 	@GET
 	@Path("/{idUsuario}")
@@ -87,5 +67,21 @@ public class MedicoController {
 
 		return Response.ok(lista).build();
 	}
+
+//	// PUT com RESPONSE
+//	@PUT
+//	@Path("/atualizar")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response atualizar(MedicoVO medicoVO) {
+//		MedicoBO medicoBO = new MedicoBO();
+//		boolean sucesso = medicoBO.atualizar(medicoVO);
+//		if (sucesso) {
+//			return Response.ok("Médico atualizado com sucesso.").build();
+//		} else {
+//			return Response.status(Response.Status.BAD_REQUEST)
+//					.entity("Falha ao atualizar o médico. Verifique o ID e os dados.").build();
+//		}
+//	}
 
 }

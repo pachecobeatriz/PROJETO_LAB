@@ -1,62 +1,42 @@
-// ===============================
-// // ===============================
-/* Prezada Beatriz, comentei com = , para ficar mais legível o código,
-tava uma bagunça, aproveitei o que e aramquei fora o resto */
-// OBS: Deixei Funcionario1.js - Mas da para excluir.
-// ===============================
-// ===============================
-
+// Configuração de endpoints e elementos.
 const API_BASE = "http://localhost:8080/laboratorio/rest";
-
 const ENDPOINT_LISTAR_REQUISICAO = `${API_BASE}/exame/listarPorRequisicao`;
-const ENDPOINT_EXCLUIR_EXAME    = `${API_BASE}/exame/excluir`;
-const ENDPOINT_LAUDO_CADASTRAR  = `${API_BASE}/laudo/cadastrar`;
-const ENDPOINT_LAUDO_DOWNLOAD   = `${API_BASE}/laudo/download`;
-// Achei mais fácil para compor o caminho!
+const ENDPOINT_EXCLUIR_EXAME = `${API_BASE}/exame/excluir`;
+const ENDPOINT_LAUDO_CADASTRAR = `${API_BASE}/laudo/cadastrar`;
+const ENDPOINT_LAUDO_DOWNLOAD = `${API_BASE}/laudo/download`;
 
-
-
-// ===============================
-// ELEMENTOS DE TELA
-// ===============================
-
-// Busca por requisição
 const inputRequisicao = document.getElementById("idRequisicao");
-const btnPesquisar    = document.getElementById("btnPesquisar");
-const btnLimpar       = document.getElementById("btnLimpar");
-const btnToggle       = document.getElementById("btnToggle");
+const btnPesquisar = document.getElementById("btnPesquisar");
+const btnLimpar = document.getElementById("btnLimpar");
+const btnToggle = document.getElementById("btnToggle");
 
-// Tabela de exames
-const tbody = document.getElementById("tbody");
-
-// Formulário "Cadastro de Exame"
 const containerFormData = document.getElementById("containerFormData");
-const formExame   = document.getElementById("formExame");
-const idPaciente  = document.getElementById("idPaciente");
-const idMedico    = document.getElementById("idMedico");
+const formExame = document.getElementById("formExame");
+const idPaciente = document.getElementById("idPaciente");
+const idMedico = document.getElementById("idMedico");
 const idTipoExame = document.getElementById("idTipoExame");
-const dataExame   = document.getElementById("dataExame");
+const dataExame = document.getElementById("dataExame");
 const observacoes = document.getElementById("observacoes");
 const statusLaudo = document.getElementById("statusLaudo");
-const idLaudo     = document.getElementById("idLaudo");
-const dataLaudo   = document.getElementById("dataLaudo");
+const idLaudo = document.getElementById("idLaudo");
+const dataLaudo = document.getElementById("dataLaudo");
 const arquivoInput = document.getElementById("arquivo");
-const nomeArquivo  = document.getElementById("nome-arquivo");
+const nomeArquivo = document.getElementById("nome-arquivo");
 
-// Estado em memória
+const tbody = document.getElementById("tbody");
 let examesCarregados = [];
-let idExameEmEdicao  = null;
+let idExameEmEdicao = null;
 
-// ===============================
-// INICIALIZAÇÃO
-// ===============================
 
+/* Inicialização do processo.
+Faz o código dentro da função só ser executado após o HTML ser carregado.
+*/
 document.addEventListener("DOMContentLoaded", () => {
     validarSessaoFuncionario();
     configurarEventos();
 });
 
-// Verifica se há usuário na sessão e se é FUNCIONARIO
+// Verificação/validação de sessão.
 function validarSessaoFuncionario() {
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
@@ -67,7 +47,7 @@ function validarSessaoFuncionario() {
     }
 }
 
-// Liga os eventos da tela
+// Configuração de eventos dos botões do formulário de pesquisa.
 function configurarEventos() {
     if (btnPesquisar) {
         btnPesquisar.addEventListener("click", (e) => {
@@ -103,10 +83,8 @@ function configurarEventos() {
     }
 }
 
-// ===============================
-// BUSCA POR NÚMERO DE REQUISIÇÃO
-// ===============================
 
+// Busca de requisições.
 function pesquisarRequisicao() {
     const numero = inputRequisicao.value.trim();
 
@@ -133,10 +111,8 @@ function pesquisarRequisicao() {
         });
 }
 
-// ===============================
-// TABELA DE EXAMES
-// ===============================
 
+// Renderização da tabela de exames.
 function preencherTabela(lista) {
     tbody.innerHTML = "";
 
@@ -152,7 +128,7 @@ function preencherTabela(lista) {
     lista.forEach(exame => {
         const tr = document.createElement("tr");
 
-        const isPronto    = exame.status === "PRONTO";
+        const isPronto = exame.status === "PRONTO";
         const podeExcluir = exame.status === "PENDENTE";
 
         tr.innerHTML = `
@@ -168,20 +144,20 @@ function preencherTabela(lista) {
             <td>
                 <button class="btn-editar" data-id="${exame.idExame}" style="padding: 5px 15px;">Editar</button>
                 ${isPronto && exame.idLaudo && exame.idLaudo !== 0
-                    ? `<button class="btn-laudo" data-id="${exame.idExame}" style="padding: 5px 15px;">Laudo</button>`
-                    : ""
-                }
+                ? `<button class="btn-laudo" data-id="${exame.idExame}" style="padding: 5px 15px;">Laudo</button>`
+                : ""
+            }
                 ${podeExcluir
-                    ? `<button class="btn-excluir" data-id="${exame.idExame}" style="padding: 5px 15px;">Excluir</button>`
-                    : ""
-                }
+                ? `<button class="btn-excluir" data-id="${exame.idExame}" style="padding: 5px 15px;">Excluir</button>`
+                : ""
+            }
             </td>
         `;
 
         tbody.appendChild(tr);
     });
 
-    // Eventos dos botões da tabela
+    // Eventos dos botões da tabela.
     tbody.querySelectorAll(".btn-editar").forEach(btn => {
         btn.addEventListener("click", () => {
             const id = btn.getAttribute("data-id");
@@ -196,7 +172,6 @@ function preencherTabela(lista) {
         });
     });
 
-    // (Opcional) se tiver endpoint de download de laudo implementado
     tbody.querySelectorAll(".btn-laudo").forEach(btn => {
         btn.addEventListener("click", () => {
             const id = btn.getAttribute("data-id");
@@ -205,10 +180,8 @@ function preencherTabela(lista) {
     });
 }
 
-// ===============================
-// CARREGAR EXAME PARA EDIÇÃO/LAUDO
-// ===============================
 
+// Seleciona o exame na lista examesCarregados, preenche o formulário de exame/laudo e exibe o formulário.
 function carregarExameParaEdicao(idExame) {
     const exame = examesCarregados.find(e => String(e.idExame) === String(idExame));
 
@@ -218,19 +191,16 @@ function carregarExameParaEdicao(idExame) {
     }
 
     idExameEmEdicao = exame.idExame;
-
-    // Preenche os campos do exame
-    idPaciente.value  = exame.idPaciente;
-    idMedico.value    = exame.idMedico;
+    idPaciente.value = exame.idPaciente;
+    idMedico.value = exame.idMedico;
     idTipoExame.value = exame.idTipoExame;
-    dataExame.value   = exame.dataExame || "";
+    dataExame.value = exame.dataExame || "";
     observacoes.value = exame.observacoes || "";
-
     statusLaudo.value = exame.status || "PENDENTE";
-    idLaudo.value     = exame.idLaudo && exame.idLaudo !== 0 ? exame.idLaudo : "";
-    dataLaudo.value   = exame.dataLaudo || "";
+    idLaudo.value = exame.idLaudo && exame.idLaudo !== 0 ? exame.idLaudo : "";
+    dataLaudo.value = exame.dataLaudo || "";
 
-    // limpa seleção de arquivo
+    // Limpa.
     if (arquivoInput) {
         arquivoInput.value = "";
     }
@@ -238,7 +208,7 @@ function carregarExameParaEdicao(idExame) {
         nomeArquivo.value = "Nenhum arquivo selecionado";
     }
 
-    // Mostra o formulário de exame/laudo
+    // Toggle.
     if (containerFormData) {
         containerFormData.style.display = "block";
     }
@@ -246,16 +216,14 @@ function carregarExameParaEdicao(idExame) {
         btnToggle.textContent = "Ocultar";
     }
 
-    // Rola até o formulário
+    // Rola até o formulário.
     if (formExame) {
         formExame.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 }
 
-// ===============================
-// GRAVAR LAUDO (PDF) PARA O EXAME
-// ===============================
 
+// Gerenciamento de laudos (upload).
 async function gravarLaudo(event) {
     event.preventDefault();
 
@@ -270,12 +238,12 @@ async function gravarLaudo(event) {
     }
 
     try {
-        // Monta o objeto LaudoVO para enviar como JSON
+        // Monta o objeto LaudoVO para enviar como JSON.
         const laudoVO = {
             idLaudo: parseInt(idLaudo.value || "0", 10),
             idExame: idExameEmEdicao,
-            arquivo: null, // o backend preenche a partir do InputStream
-            dataLaudo: dataLaudo.value || null // se vazio, o BO coloca LocalDate.now()
+            arquivo: null, // o Back preenche a partir do InputStream.
+            dataLaudo: dataLaudo.value || null // se vazio, o BO coloca LocalDate.now().
         };
 
         const formData = new FormData();
@@ -283,7 +251,7 @@ async function gravarLaudo(event) {
         // arquivo PDF
         formData.append("file", arquivoInput.files[0]);
 
-        // JSON do LaudoVO (mesmo nome do parâmetro no LaudoController: "laudoVO")
+        // JSON do LaudoVO (mesmo nome do parâmetro no LaudoController: "laudoVO").
         const blobLaudo = new Blob([JSON.stringify(laudoVO)], {
             type: "application/json"
         });
@@ -294,12 +262,12 @@ async function gravarLaudo(event) {
             body: formData
         });
 
-        const laudoSalvo = await response.json(); // LaudoVO retornado
+        const laudoSalvo = await response.json(); // LaudoVO retornado.
 
         if (response.ok) {
             alert("Laudo gravado com sucesso para o exame " + laudoSalvo.idExame + ".");
 
-            // Atualiza campos de tela com o retorno do backend
+            // Atualiza campos de tela com o retorno do Back.
             if (laudoSalvo.idLaudo !== undefined) {
                 idLaudo.value = laudoSalvo.idLaudo;
             }
@@ -307,14 +275,14 @@ async function gravarLaudo(event) {
                 dataLaudo.value = laudoSalvo.dataLaudo;
             }
 
-            // Atualiza o status no formulário (visual)
+            // Atualiza o status no formulário (visual).
             statusLaudo.value = "PRONTO";
 
             // limpa seleção de arquivo
             arquivoInput.value = "";
             nomeArquivo.value = "Nenhum arquivo selecionado";
 
-            // Recarrega a lista da requisição, se estiver preenchida
+            // Recarrega a lista da requisição, se estiver preenchida.
             if (inputRequisicao.value) {
                 pesquisarRequisicao();
             }
@@ -328,10 +296,8 @@ async function gravarLaudo(event) {
     }
 }
 
-// ===============================
-// EXCLUIR EXAME
-// ===============================
 
+// Exclusão de exames.
 function excluirExame(idExame) {
     if (!confirm(`Deseja realmente excluir o exame ID ${idExame}?`)) {
         return;
@@ -360,24 +326,20 @@ function excluirExame(idExame) {
         });
 }
 
-// ===============================
-// DOWNLOAD DO LAUDO (Falta no back) :(
-// ===============================
 
+// Download do laudo :)
 function baixarLaudo(idExame) {
     if (!idExame) {
         alert("Exame inválido para download do laudo.");
         return;
     }
 
-    // Backend já verifica se o exame está PRONTO e se existe laudo
+    // Back já verifica se o exame está PRONTO e se existe laudo :D
     window.location.href = `${ENDPOINT_LAUDO_DOWNLOAD}/${idExame}`;
 }
 
-// ===============================
-// UTILITÁRIOS DE TELA
-// ===============================
 
+// Utilitários de tela (limpa a tela).
 function limparTela() {
     inputRequisicao.value = "";
     tbody.innerHTML = "";
@@ -390,6 +352,8 @@ function limparTela() {
     }
 }
 
+
+// Utilitários de tela (limpa o formulário).
 function limparFormulario() {
     if (formExame) {
         formExame.reset();
@@ -406,7 +370,7 @@ function limparFormulario() {
     }
 }
 
-// Mostra / oculta o bloco "Cadastro de Exame"
+// Utilitários de tela (mostra/oculta o bloco de cadastro de exame).
 function toggleFormulario() {
     if (!containerFormData) return;
 
@@ -419,7 +383,8 @@ function toggleFormulario() {
     }
 }
 
-// Converte "yyyy-MM-dd" -> "dd/MM/yyyy" para exibição em tabela
+
+// Converte "yyyy-MM-dd" -> "dd/MM/yyyy" para exibição em tabela.
 function formatarDataBR(data) {
     if (!data) return "";
     if (typeof data === "string" && data.includes("-")) {

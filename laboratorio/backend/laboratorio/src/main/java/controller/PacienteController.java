@@ -41,22 +41,6 @@ public class PacienteController {
 		return pacienteAtualizado;
 	}
 
-//	// PUT com RESPONSE
-//	@PUT
-//	@Path("/atualizar")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response atualizar(PacienteVO pacienteVO) {
-//		PacienteBO pacienteBO = new PacienteBO();
-//		boolean sucesso = pacienteBO.atualizar(pacienteVO);
-//
-//		if (sucesso) {
-//			return Response.ok("Paciente atualizado com sucesso.").build();
-//		} else {
-//			return Response.status(Response.Status.BAD_REQUEST).entity("Falha ao atualizar o paciente.").build();
-//		}
-//	}
-
 	@GET
 	@Path("/{idUsuario}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -79,5 +63,20 @@ public class PacienteController {
 
 		return Response.ok(lista).build();
 	}
+
+//	// PUT com RESPONSE
+//	@PUT
+//	@Path("/atualizar")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response atualizar(PacienteVO pacienteVO) {
+//		PacienteBO pacienteBO = new PacienteBO();
+//		boolean sucesso = pacienteBO.atualizar(pacienteVO);
+//		if (sucesso) {
+//			return Response.ok("Paciente atualizado com sucesso.").build();
+//		} else {
+//			return Response.status(Response.Status.BAD_REQUEST).entity("Falha ao atualizar o paciente.").build();
+//		}
+//	}
 
 }

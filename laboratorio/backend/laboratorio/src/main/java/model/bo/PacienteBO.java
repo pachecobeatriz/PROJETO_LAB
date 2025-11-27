@@ -21,10 +21,10 @@ public class PacienteBO {
 		// Controle de transação!
 		UserTransaction userTransaction = BancoJTA.getUserTransaction();
 		Connection conn = BancoJTA.getConnectionJTA();
-		// Geralmente faz no DAO, estamos fazendo aqui pq é um controle de transação.
 
 		try {
 			userTransaction.begin();
+			// A partir deste ponto, todas as operações de banco de dados na Connection só serão permanentes se o commit for chamado.
 
 			if (usuarioDAO.verificarExistenciaPacientePorCpf(pacienteVO, conn)) { // Conferindo se o user já existe.
 				System.out.println("\nPaciente já cadastrado!");
@@ -34,9 +34,11 @@ public class PacienteBO {
 				pacienteVO = pacienteDAO.cadastrar(pacienteVO, conn);
 			}
 			userTransaction.commit();
+			// Se tudo acima correu sem erros, confirma as alterações no banco de dados (grava permanentemente).
 
 		} catch (Exception erro) {
 			BancoJTA.rollbackJTA();
+			// Desfaz todas as alterações feitas desde o begin()
 		} finally {
 			BancoJTA.closeConnectionJTA(conn);
 		}
@@ -80,6 +82,13 @@ public class PacienteBO {
 
 			return pacienteAtualizado;
 		}
+		
+		// LISTAR...
+		
+		public PacienteVO buscarPorId(int idUsuario) {
+			PacienteDAO pacienteDAO = new PacienteDAO();
+			return pacienteDAO.buscarPorId(idUsuario);
+		}
 
 //		// PUT com RESPONSE
 //		public boolean atualizar(PacienteVO pacienteVO) {
@@ -118,12 +127,5 @@ public class PacienteBO {
 //
 //			return sucesso;
 //		}
-
-	// LISTAR...
-		
-	public PacienteVO buscarPorId(int idUsuario) {
-		PacienteDAO pacienteDAO = new PacienteDAO();
-		return pacienteDAO.buscarPorId(idUsuario);
-	}
 
 }

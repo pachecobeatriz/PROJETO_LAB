@@ -1,5 +1,6 @@
 const formulario = document.querySelector('[data-formulario]');
 
+// Tratamento da Submissão
 formulario.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
@@ -11,6 +12,7 @@ formulario.addEventListener('submit', (evento) => {
     realizarLogin(usuario);
 });
 
+// Realização do Login e Redirecionamento
 async function realizarLogin(usuario) {
 
     let options = {

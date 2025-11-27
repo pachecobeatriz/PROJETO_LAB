@@ -56,9 +56,7 @@ public class LaudoBO {
 			throw new RuntimeException("Não foi possível gravar os dados do laudo.");
 		}
 
-// ===============================
 // Se Pronto - Mete bala
-// ===============================
 		if (laudoVO.getIdExame() <= 0) {
 			throw new RuntimeException("idExame não informado no LaudoVO para atualizar o status.");
 		}
@@ -69,7 +67,6 @@ public class LaudoBO {
 		if (!sucessoStatus) {
 			throw new RuntimeException("Laudo gravado, mas não foi possível atualizar o status do exame para PRONTO.");
 		}
-
 
 		return laudoVO;
 	}
